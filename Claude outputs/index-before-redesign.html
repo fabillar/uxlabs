@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UX Labs Pro — Web Design & Digital Growth Partnership</title>
+<meta name="description" content="UX Labs Pro is a web design & digital growth partnership. We design, build, and optimize digital experiences that turn visitors into customers.">
+<link rel="icon" type="image/png" href="assets/logo-dark.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;1,500&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ============ PLACEHOLDER CONTENT NOTICE ============
+   Headlines, service copy, process copy, testimonials, and about copy
+   in this file are DRAFT placeholder content written to show the design.
+   Testimonials in particular are clearly-marked placeholders — replace
+   with real client quotes before this site goes live.
+   ===================================================== */
+
+/* ---------- Design tokens ---------- */
+:root{
+  --bg:#fdf3f7;
+  --bg2:#fbe6ef;
+  --card:#ffffff;
+  --card-border:#f3d3e4;
+  --text:#3a1330;
+  --text-dim:#8a5c78;
+  --text-faint:#c093ae;
+  --magenta:#e8298c;
+  --purple:#9142e8;
+  --pink:#ff8fc9;
+  --lavender:#b48cf2;
+  --peach:#ffab91;
+  --blue:#3f7bff;
+  --cyan:#20c3e0;
+  --shadow:220,100,150;
+  --nav-bg:255,255,255;
+  --radius-lg:28px;
+  --radius-md:20px;
+  --radius-sm:14px;
+  --maxw:1180px;
+  --ease:cubic-bezier(.22,1,.36,1);
+  color-scheme:light;
+  background:var(--bg);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#170c16;
+    --bg2:#241220;
+    --card:#251320;
+    --card-border:#452139;
+    --text:#fbeaf3;
+    --text-dim:#d3a8c4;
+    --text-faint:#9c6c8c;
+    --magenta:#ff5fac;
+    --purple:#bb84ff;
+    --pink:#ffa4dc;
+    --lavender:#cfabff;
+    --peach:#ffb899;
+    --blue:#7fa4ff;
+    --cyan:#5fe0ff;
+    --shadow:0,0,0;
+    --nav-bg:30,16,27;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#170c16;
+  --bg2:#241220;
+  --card:#251320;
+  --card-border:#452139;
+  --text:#fbeaf3;
+  --text-dim:#d3a8c4;
+  --text-faint:#9c6c8c;
+  --magenta:#ff5fac;
+  --purple:#bb84ff;
+  --pink:#ffa4dc;
+  --lavender:#cfabff;
+  --peach:#ffb899;
+  --blue:#7fa4ff;
+  --cyan:#5fe0ff;
+  --shadow:0,0,0;
+  --nav-bg:30,16,27;
+  color-scheme:dark;
+}
+
+*,*::before,*::after{ box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+  position:relative;
+  isolation:isolate;
+}
+img{ max-width:100%; display:block; }
+a{ color:inherit; text-decoration:none; }
+ul{ list-style:none; margin:0; padding:0; }
+section{ position:relative; }
+#services,#process,#testimonials,#about,#contact{ scroll-margin-top:90px; }
+@media (max-width:640px){ .hide-mobile{ display:none; } }
+.wrap{ width:100%; max-width:var(--maxw); margin-inline:auto; padding-inline:clamp(20px,5vw,40px); }
+::selection{ background:var(--magenta); color:#fff; }
+
+/* logo theme swap */
+.logo-dark{ display:block; }
+.logo-light{ display:none; }
+:root[data-theme="dark"] .logo-dark{ display:none; }
+:root[data-theme="dark"] .logo-light{ display:block; }
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) .logo-dark{ display:none; }
+  :root:not([data-theme="light"]) .logo-light{ display:block; }
+}
+
+/* ---------- Background glow ---------- */
+.glow{
+  position:fixed;
+  inset:-10%;
+  z-index:-1;
+  pointer-events:none;
+  background:
+    radial-gradient(38vmax 38vmax at 10% 8%, color-mix(in srgb, var(--pink) 38%, transparent), transparent 70%),
+    radial-gradient(34vmax 34vmax at 92% 6%, color-mix(in srgb, var(--peach) 30%, transparent), transparent 70%),
+    radial-gradient(42vmax 42vmax at 88% 60%, color-mix(in srgb, var(--blue) 24%, transparent), transparent 70%),
+    radial-gradient(40vmax 40vmax at 6% 70%, color-mix(in srgb, var(--lavender) 30%, transparent), transparent 70%),
+    radial-gradient(30vmax 30vmax at 50% 98%, color-mix(in srgb, var(--magenta) 20%, transparent), transparent 70%),
+    var(--bg2);
+  animation:drift 32s ease-in-out infinite alternate;
+}
+@keyframes drift{
+  0%{ transform:translate3d(0,0,0) scale(1); }
+  100%{ transform:translate3d(-2.5%,2%,0) scale(1.06); }
+}
+@media (prefers-reduced-motion: reduce){
+  .glow{ animation:none; }
+  html{ scroll-behavior:auto; }
+}
+
+/* ---------- Buttons ---------- */
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  font-family:'Poppins',sans-serif;
+  font-weight:600;
+  font-size:15px;
+  padding:15px 28px;
+  border-radius:999px;
+  border:1px solid transparent;
+  cursor:pointer;
+  white-space:nowrap;
+  transition:transform .45s var(--ease), box-shadow .45s var(--ease), background .3s ease, color .3s ease, border-color .3s ease;
+  position:relative;
+  isolation:isolate;
+}
+.btn-primary{
+  color:#fff;
+  background:linear-gradient(100deg, var(--magenta), var(--purple) 60%, var(--blue));
+  background-size:160% 160%;
+  box-shadow:0 14px 30px -10px color-mix(in srgb, var(--magenta) 55%, transparent);
+}
+.btn-primary:hover{ transform:translateY(-3px); background-position:100% 50%; box-shadow:0 18px 38px -10px color-mix(in srgb, var(--magenta) 65%, transparent); }
+.btn-primary:active{ transform:translateY(-1px); }
+.btn-ghost{
+  color:var(--text);
+  background:color-mix(in srgb, var(--card) 70%, transparent);
+  border-color:var(--card-border);
+  backdrop-filter:blur(6px);
+}
+.btn-ghost:hover{ transform:translateY(-3px); border-color:var(--magenta); color:var(--magenta); }
+.btn-sm{ padding:11px 20px; font-size:13.5px; }
+
+/* ---------- Eyebrow / section heads ---------- */
+.eyebrow{
+  font-weight:600;
+  font-size:clamp(11px,2vw,12.5px);
+  letter-spacing:.28em;
+  text-transform:uppercase;
+  color:var(--magenta);
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+}
+.eyebrow::before{
+  content:"";
+  width:22px;
+  height:1px;
+  background:linear-gradient(90deg, var(--magenta), var(--peach));
+}
+.section-head{
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+  max-width:640px;
+  margin-bottom:clamp(36px,6vw,64px);
+}
+.section-head.center{ align-items:center; text-align:center; margin-inline:auto; }
+.section-head h2{
+  margin:0;
+  font-weight:600;
+  font-size:clamp(28px,4.4vw,44px);
+  line-height:1.15;
+  letter-spacing:-0.01em;
+  text-wrap:balance;
+}
+.section-head p{
+  margin:0;
+  color:var(--text-dim);
+  font-size:clamp(15px,1.6vw,17px);
+  line-height:1.7;
+  max-width:52ch;
+}
+.grad-text{
+  background:linear-gradient(100deg, var(--magenta), var(--purple) 45%, var(--blue) 75%, var(--cyan));
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+
+/* ---------- Reveal-on-scroll ---------- */
+.reveal{
+  opacity:0;
+  transform:translateY(28px);
+  transition:opacity .8s var(--ease), transform .8s var(--ease);
+  transition-delay:var(--d, 0s);
+}
+.reveal.in{ opacity:1; transform:translateY(0); }
+@media (prefers-reduced-motion: reduce){
+  .reveal{ opacity:1; transform:none; transition:none; }
+}
+
+/* ---------- Navbar ---------- */
+.navbar{
+  position:fixed;
+  top:0; left:0; right:0;
+  z-index:100;
+  padding:18px clamp(20px,5vw,40px);
+  transition:padding .4s var(--ease), background .4s var(--ease), box-shadow .4s var(--ease), border-color .4s var(--ease);
+  border-bottom:1px solid transparent;
+}
+.navbar.scrolled{
+  padding-block:12px;
+  background:rgba(var(--nav-bg),0.72);
+  backdrop-filter:blur(14px) saturate(160%);
+  -webkit-backdrop-filter:blur(14px) saturate(160%);
+  border-bottom-color:var(--card-border);
+  box-shadow:0 10px 30px -18px rgba(var(--shadow),0.35);
+}
+.navbar-inner{
+  max-width:var(--maxw);
+  margin-inline:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:24px;
+}
+.brand{ display:flex; align-items:center; }
+.brand img{ height:26px; width:auto; transition:transform .3s var(--ease); }
+.brand:hover img{ transform:scale(1.04); }
+.nav-links{
+  display:flex;
+  align-items:center;
+  gap:clamp(18px,3vw,34px);
+}
+.nav-links a{
+  position:relative;
+  font-size:14.5px;
+  font-weight:500;
+  color:var(--text-dim);
+  padding:6px 0;
+  transition:color .3s ease;
+}
+.nav-links a::after{
+  content:"";
+  position:absolute;
+  left:0; right:100%;
+  bottom:0;
+  height:2px;
+  border-radius:2px;
+  background:linear-gradient(90deg, var(--magenta), var(--purple));
+  transition:right .4s var(--ease);
+}
+.nav-links a:hover{ color:var(--text); }
+.nav-links a:hover::after{ right:0; }
+.nav-actions{ display:flex; align-items:center; gap:12px; }
+
+.theme-toggle{
+  width:38px; height:38px;
+  border-radius:50%;
+  border:1px solid var(--card-border);
+  background:var(--card);
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer;
+  color:var(--text);
+  transition:transform .4s var(--ease), border-color .3s ease;
+  flex-shrink:0;
+}
+.theme-toggle:hover{ transform:rotate(-14deg); border-color:var(--magenta); }
+.theme-toggle svg{ width:17px; height:17px; }
+.theme-toggle .i-sun{ display:none; }
+:root[data-theme="dark"] .theme-toggle .i-moon{ display:none; }
+:root[data-theme="dark"] .theme-toggle .i-sun{ display:block; }
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) .theme-toggle .i-moon{ display:none; }
+  :root:not([data-theme="light"]) .theme-toggle .i-sun{ display:block; }
+}
+
+.nav-burger{
+  display:none;
+  width:38px; height:38px;
+  border-radius:50%;
+  border:1px solid var(--card-border);
+  background:var(--card);
+  cursor:pointer;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  gap:4px;
+}
+.nav-burger span{
+  width:16px; height:2px; border-radius:2px;
+  background:var(--text);
+  transition:transform .35s var(--ease), opacity .35s var(--ease);
+}
+.nav-burger.open span:nth-child(1){ transform:translateY(6px) rotate(45deg); }
+.nav-burger.open span:nth-child(2){ opacity:0; }
+.nav-burger.open span:nth-child(3){ transform:translateY(-6px) rotate(-45deg); }
+
+.mobile-panel{
+  position:fixed;
+  inset:0;
+  z-index:99;
+  background:rgba(var(--nav-bg),0.98);
+  backdrop-filter:blur(18px);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:30px;
+  opacity:0;
+  visibility:hidden;
+  transform:translateY(-12px);
+  transition:opacity .4s var(--ease), transform .4s var(--ease), visibility .4s;
+}
+.mobile-panel.open{ opacity:1; visibility:visible; transform:translateY(0); }
+.mobile-panel a{ font-size:22px; font-weight:600; }
+.mobile-panel .btn{ margin-top:10px; }
+
+@media (max-width:860px){
+  .nav-links{ display:none; }
+  .nav-burger{ display:flex; }
+}
+
+/* ---------- Hero ---------- */
+.hero{
+  min-height:100dvh;
+  display:flex;
+  align-items:center;
+  padding-top:120px;
+  padding-bottom:80px;
+}
+.hero-inner{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+  gap:26px;
+  max-width:900px;
+  margin-inline:auto;
+}
+.hero .badge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 16px;
+  border-radius:999px;
+  background:var(--card);
+  border:1px solid var(--card-border);
+  font-size:13px;
+  font-weight:500;
+  color:var(--text-dim);
+  box-shadow:0 10px 26px -16px rgba(var(--shadow),0.4);
+}
+.hero .badge .dot{
+  width:7px; height:7px; border-radius:50%;
+  background:linear-gradient(135deg, var(--magenta), var(--peach));
+  animation:pulse 2.2s ease-in-out infinite;
+}
+@keyframes pulse{ 0%,100%{ opacity:1; transform:scale(1);} 50%{ opacity:.55; transform:scale(.8);} }
+
+.hero h1{
+  margin:0;
+  font-weight:600;
+  font-size:clamp(38px,7vw,74px);
+  line-height:1.06;
+  letter-spacing:-0.02em;
+  text-wrap:balance;
+}
+.hero h1 .grad-text{ display:inline-block; }
+.hero .sub{
+  margin:0;
+  max-width:56ch;
+  color:var(--text-dim);
+  font-size:clamp(16px,2vw,19px);
+  line-height:1.7;
+}
+.hero .cta-row{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  flex-wrap:wrap;
+  justify-content:center;
+  margin-top:8px;
+}
+.hero .proof-row{
+  display:flex;
+  align-items:center;
+  gap:clamp(20px,4vw,40px);
+  flex-wrap:wrap;
+  justify-content:center;
+  margin-top:34px;
+  color:var(--text-faint);
+  font-size:13px;
+  font-weight:500;
+  letter-spacing:.02em;
+}
+.hero .proof-row span{ display:flex; align-items:center; gap:8px; }
+.hero .proof-row svg{ width:15px; height:15px; color:var(--magenta); flex-shrink:0; }
+
+@media (prefers-reduced-motion: reduce){
+  .hero .badge .dot{ animation:none; }
+}
+
+/* ---------- Services ---------- */
+.services{ padding-block:clamp(70px,10vw,120px); }
+.service-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:22px;
+}
+.service-card{
+  background:var(--card);
+  border:1px solid var(--card-border);
+  border-radius:var(--radius-md);
+  padding:clamp(26px,3vw,34px);
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+  position:relative;
+  overflow:hidden;
+  transition:transform .5s var(--ease), box-shadow .5s var(--ease), border-color .5s var(--ease);
+}
+.service-card::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  padding:1px;
+  background:linear-gradient(135deg, var(--magenta), var(--purple), var(--blue));
+  -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;
+  mask-composite:exclude;
+  opacity:0;
+  transition:opacity .5s var(--ease);
+  pointer-events:none;
+}
+.service-card:hover{
+  transform:translateY(-6px);
+  box-shadow:0 26px 50px -26px rgba(var(--shadow),0.45);
+}
+.service-card:hover::before{ opacity:1; }
+.service-icon{
+  width:52px; height:52px;
+  border-radius:16px;
+  display:flex; align-items:center; justify-content:center;
+  background:linear-gradient(135deg, color-mix(in srgb, var(--magenta) 18%, transparent), color-mix(in srgb, var(--blue) 18%, transparent));
+  color:var(--magenta);
+  transition:transform .5s var(--ease);
+}
+.service-card:hover .service-icon{ transform:scale(1.08) rotate(-6deg); }
+.service-icon svg{ width:24px; height:24px; }
+.service-card h3{ margin:0; font-size:18.5px; font-weight:600; }
+.service-card p{ margin:0; color:var(--text-dim); font-size:14.5px; line-height:1.7; }
+@media (max-width:920px){ .service-grid{ grid-template-columns:repeat(2,1fr); } }
+@media (max-width:600px){ .service-grid{ grid-template-columns:1fr; } }
+
+/* ---------- Process ---------- */
+.process{ padding-block:clamp(70px,10vw,120px); position:relative; }
+.process-track{
+  position:relative;
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:20px;
+}
+.process-track::before{
+  content:"";
+  position:absolute;
+  top:26px; left:6%; right:6%;
+  height:2px;
+  background:linear-gradient(90deg, var(--magenta), var(--purple), var(--blue), var(--cyan), var(--peach));
+  opacity:.35;
+}
+.process-step{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  position:relative;
+}
+.process-step .num{
+  width:52px; height:52px;
+  border-radius:50%;
+  background:var(--card);
+  border:1px solid var(--card-border);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Fraunces',Georgia,serif;
+  font-weight:600;
+  font-size:19px;
+  background-clip:padding-box;
+  color:var(--magenta);
+  box-shadow:0 10px 24px -14px rgba(var(--shadow),0.4);
+  z-index:1;
+  transition:transform .5s var(--ease), box-shadow .5s var(--ease);
+}
+.process-step:hover .num{ transform:scale(1.08); box-shadow:0 14px 30px -14px rgba(var(--shadow),0.55); }
+.process-step h3{ margin:0; font-size:16.5px; font-weight:600; }
+.process-step p{ margin:0; color:var(--text-dim); font-size:13.8px; line-height:1.7; }
+@media (max-width:920px){
+  .process-track{ grid-template-columns:repeat(2,1fr); gap:34px 20px; }
+  .process-track::before{ display:none; }
+}
+@media (max-width:560px){
+  .process-track{ grid-template-columns:1fr; }
+}
+
+/* ---------- Testimonials ---------- */
+.testimonials{ padding-block:clamp(70px,10vw,120px); }
+.t-slider{
+  position:relative;
+  max-width:760px;
+  margin-inline:auto;
+}
+.t-track{
+  position:relative;
+  min-height:250px;
+}
+.t-slide{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+  gap:22px;
+  opacity:0;
+  transform:translateY(14px);
+  pointer-events:none;
+  transition:opacity .6s var(--ease), transform .6s var(--ease);
+}
+.t-slide.active{ opacity:1; transform:translateY(0); pointer-events:auto; position:relative; }
+.t-slide svg{ width:34px; height:34px; color:var(--magenta); opacity:.5; }
+.t-slide p{
+  margin:0;
+  font-size:clamp(18px,2.6vw,24px);
+  line-height:1.55;
+  font-weight:500;
+  color:var(--text);
+  text-wrap:balance;
+}
+.t-person{ display:flex; align-items:center; gap:12px; }
+.t-avatar{
+  width:44px; height:44px;
+  border-radius:50%;
+  background:linear-gradient(135deg, var(--magenta), var(--purple), var(--blue));
+  display:flex; align-items:center; justify-content:center;
+  color:#fff; font-weight:600; font-size:15px;
+}
+.t-person .who{ text-align:left; }
+.t-person .name{ font-weight:600; font-size:14.5px; }
+.t-person .role{ font-size:12.5px; color:var(--text-faint); }
+.t-dots{
+  display:flex;
+  justify-content:center;
+  gap:9px;
+  margin-top:36px;
+}
+.t-dots button{
+  width:8px; height:8px;
+  border-radius:50%;
+  border:none;
+  padding:0;
+  background:var(--card-border);
+  cursor:pointer;
+  transition:transform .3s var(--ease), background .3s ease, width .3s var(--ease);
+}
+.t-dots button.active{
+  width:26px;
+  border-radius:5px;
+  background:linear-gradient(90deg, var(--magenta), var(--purple));
+}
+.t-note{
+  text-align:center;
+  margin-top:18px;
+  font-size:11.5px;
+  color:var(--text-faint);
+  font-style:italic;
+}
+
+/* ---------- About ---------- */
+.about{ padding-block:clamp(70px,10vw,120px); }
+.about-grid{
+  display:grid;
+  grid-template-columns:1.1fr 0.9fr;
+  gap:clamp(30px,6vw,70px);
+  align-items:center;
+}
+.about-copy h2{
+  margin:0 0 20px;
+  font-weight:600;
+  font-size:clamp(28px,4.2vw,40px);
+  line-height:1.18;
+  letter-spacing:-.01em;
+  text-wrap:balance;
+}
+.about-copy p{
+  margin:0 0 16px;
+  color:var(--text-dim);
+  font-size:15.5px;
+  line-height:1.8;
+  max-width:52ch;
+}
+.value-list{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  margin-top:26px;
+}
+.value-item{
+  display:flex;
+  align-items:flex-start;
+  gap:14px;
+}
+.value-item .ic{
+  width:34px; height:34px;
+  border-radius:10px;
+  flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  background:linear-gradient(135deg, color-mix(in srgb, var(--magenta) 20%, transparent), color-mix(in srgb, var(--blue) 20%, transparent));
+  color:var(--magenta);
+}
+.value-item .ic svg{ width:16px; height:16px; }
+.value-item strong{ display:block; font-size:14.5px; margin-bottom:2px; }
+.value-item span{ font-size:13.5px; color:var(--text-dim); line-height:1.6; }
+
+.about-visual{
+  position:relative;
+  aspect-ratio:1/1;
+  border-radius:var(--radius-lg);
+  background:var(--card);
+  border:1px solid var(--card-border);
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 30px 60px -30px rgba(var(--shadow),0.4);
+}
+.about-visual::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(60% 60% at 20% 15%, color-mix(in srgb, var(--pink) 45%, transparent), transparent 70%),
+    radial-gradient(60% 60% at 85% 85%, color-mix(in srgb, var(--blue) 35%, transparent), transparent 70%);
+  animation:drift 24s ease-in-out infinite alternate;
+}
+.about-visual img{
+  width:64%;
+  position:relative;
+  filter:drop-shadow(0 20px 40px rgba(var(--shadow),0.25));
+}
+@media (max-width:860px){
+  .about-grid{ grid-template-columns:1fr; }
+  .about-visual{ order:-1; max-width:340px; margin-inline:auto; width:100%; }
+}
+
+/* ---------- CTA banner ---------- */
+.cta-banner{ padding-block:clamp(50px,8vw,90px); }
+.cta-panel{
+  position:relative;
+  border-radius:var(--radius-lg);
+  padding:clamp(46px,7vw,80px) clamp(24px,6vw,60px);
+  text-align:center;
+  overflow:hidden;
+  background:linear-gradient(120deg, var(--magenta), var(--purple) 55%, var(--blue));
+  color:#fff;
+  isolation:isolate;
+}
+.cta-panel::before{
+  content:"";
+  position:absolute; inset:0;
+  background:
+    radial-gradient(50% 70% at 10% 10%, rgba(255,255,255,.22), transparent 60%),
+    radial-gradient(45% 65% at 95% 100%, rgba(255,255,255,.15), transparent 60%);
+  pointer-events:none;
+}
+.cta-panel h2{
+  margin:0 0 14px;
+  font-weight:600;
+  font-size:clamp(26px,4.4vw,42px);
+  line-height:1.2;
+  text-wrap:balance;
+}
+.cta-panel p{
+  margin:0 auto 30px;
+  max-width:52ch;
+  font-size:clamp(15px,1.8vw,17px);
+  line-height:1.7;
+  color:rgba(255,255,255,.88);
+}
+.cta-panel .btn-primary{
+  background:#fff;
+  color:var(--magenta);
+  box-shadow:0 16px 34px -14px rgba(0,0,0,.35);
+}
+.cta-panel .btn-primary:hover{ color:var(--purple); }
+.cta-panel .cta-row{ display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+.cta-panel .btn-ghost{
+  background:rgba(255,255,255,.12);
+  border-color:rgba(255,255,255,.4);
+  color:#fff;
+}
+.cta-panel .btn-ghost:hover{ background:rgba(255,255,255,.2); border-color:#fff; color:#fff; transform:translateY(-3px); }
+
+/* ---------- Contact ---------- */
+.contact{ padding-block:clamp(70px,10vw,120px); }
+.contact-grid{
+  display:grid;
+  grid-template-columns:0.85fr 1.15fr;
+  gap:clamp(30px,6vw,60px);
+}
+.contact-info{ display:flex; flex-direction:column; gap:26px; }
+.contact-info h2{
+  margin:0;
+  font-weight:600;
+  font-size:clamp(26px,3.6vw,34px);
+  line-height:1.2;
+  text-wrap:balance;
+}
+.contact-info > p{ margin:0; color:var(--text-dim); font-size:15px; line-height:1.7; max-width:40ch; }
+.contact-links{ display:flex; flex-direction:column; gap:14px; margin-top:6px; }
+.contact-link{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:14px 18px;
+  border-radius:var(--radius-sm);
+  background:var(--card);
+  border:1px solid var(--card-border);
+  transition:transform .4s var(--ease), border-color .4s ease;
+}
+.contact-link:hover{ transform:translateX(6px); border-color:var(--magenta); }
+.contact-link .ic{
+  width:38px; height:38px;
+  border-radius:11px;
+  display:flex; align-items:center; justify-content:center;
+  background:linear-gradient(135deg, color-mix(in srgb, var(--magenta) 20%, transparent), color-mix(in srgb, var(--blue) 20%, transparent));
+  color:var(--magenta);
+  flex-shrink:0;
+}
+.contact-link .ic svg{ width:17px; height:17px; }
+.contact-link .label{ font-size:11.5px; color:var(--text-faint); letter-spacing:.05em; text-transform:uppercase; }
+.contact-link .value{ font-size:14.5px; font-weight:600; }
+
+.contact-form{
+  background:var(--card);
+  border:1px solid var(--card-border);
+  border-radius:var(--radius-lg);
+  padding:clamp(26px,4vw,38px);
+  box-shadow:0 30px 60px -34px rgba(var(--shadow),0.45);
+}
+.form-row{ display:flex; flex-direction:column; gap:8px; margin-bottom:18px; }
+.form-row label{ font-size:12.5px; font-weight:600; color:var(--text-dim); letter-spacing:.02em; }
+.form-row input, .form-row textarea{
+  font-family:inherit;
+  font-size:14.5px;
+  padding:13px 16px;
+  border-radius:12px;
+  border:1px solid var(--card-border);
+  background:var(--bg);
+  color:var(--text);
+  outline:none;
+  transition:border-color .3s ease, box-shadow .3s ease;
+  resize:vertical;
+}
+.form-row input:focus, .form-row textarea:focus{
+  border-color:var(--magenta);
+  box-shadow:0 0 0 4px color-mix(in srgb, var(--magenta) 15%, transparent);
+}
+.contact-form .btn-primary{ width:100%; margin-top:4px; }
+.form-note{ margin:14px 0 0; font-size:12px; color:var(--text-faint); text-align:center; }
+.form-success{
+  display:none;
+  align-items:center;
+  gap:10px;
+  font-size:13.5px;
+  color:var(--magenta);
+  font-weight:500;
+  margin-top:14px;
+}
+.form-success.show{ display:flex; }
+@media (max-width:920px){ .contact-grid{ grid-template-columns:1fr; } }
+
+/* ---------- Footer ---------- */
+footer{
+  padding-block:44px;
+  border-top:1px solid var(--card-border);
+}
+.footer-inner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  flex-wrap:wrap;
+}
+.footer-brand{ display:flex; align-items:center; gap:12px; }
+.footer-brand img{ height:20px; width:auto; }
+.footer-brand span{ font-size:13px; color:var(--text-faint); }
+.footer-links{ display:flex; gap:26px; flex-wrap:wrap; }
+.footer-links a{ font-size:13.5px; color:var(--text-dim); transition:color .3s ease; }
+.footer-links a:hover{ color:var(--magenta); }
+.to-top{
+  width:40px; height:40px;
+  border-radius:50%;
+  border:1px solid var(--card-border);
+  background:var(--card);
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer;
+  transition:transform .4s var(--ease), border-color .3s ease;
+  color:var(--text);
+}
+.to-top:hover{ transform:translateY(-4px); border-color:var(--magenta); }
+.to-top svg{ width:16px; height:16px; }
+</style>
+</head>
+<body>
+<div class="glow" aria-hidden="true"></div>
+
+<!-- ===== Navbar ===== -->
+<header class="navbar" id="navbar">
+  <div class="navbar-inner">
+    <a href="#top" class="brand" aria-label="UX Labs Pro home">
+      <img src="assets/logo-dark.png" alt="UX Labs Pro" class="logo-dark">
+      <img src="assets/logo-light.png" alt="UX Labs Pro" class="logo-light">
+    </a>
+    <nav class="nav-links">
+      <a href="#services">Services</a>
+      <a href="#process">Process</a>
+      <a href="#testimonials">Testimonials</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode">
+        <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      </button>
+      <a href="#contact" class="btn btn-primary btn-sm" style="display:inline-flex" id="navCta">Start a Project</a>
+      <button class="nav-burger" id="navBurger" type="button" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-panel" id="mobilePanel">
+  <a href="#services" class="mp-link">Services</a>
+  <a href="#process" class="mp-link">Process</a>
+  <a href="#testimonials" class="mp-link">Testimonials</a>
+  <a href="#about" class="mp-link">About</a>
+  <a href="#contact" class="mp-link">Contact</a>
+  <a href="#contact" class="btn btn-primary mp-link">Start a Project</a>
+</div>
+
+<main id="top">
+
+<!-- ===== Hero ===== -->
+<section class="hero">
+  <div class="wrap hero-inner">
+    <div class="badge reveal">
+      <span class="dot"></span> Now booking new projects for late 2026
+    </div>
+    <h1 class="reveal" style="--d:.08s">
+      Websites that look incredible —<br class="hide-mobile">
+      and <span class="grad-text">actually grow</span> your business.
+    </h1>
+    <p class="sub reveal" style="--d:.16s">
+      UX Labs Pro is a web design &amp; digital growth partnership. We design, build, and
+      optimize digital experiences that turn visitors into customers — not just another
+      pretty template.
+    </p>
+    <div class="cta-row reveal" style="--d:.24s">
+      <a href="#contact" class="btn btn-primary">Start a Project</a>
+      <a href="#process" class="btn btn-ghost">See how we work</a>
+    </div>
+    <div class="proof-row reveal" style="--d:.32s">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Design &amp; development, end to end</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Built for speed &amp; conversion</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Partnership, not a one-off job</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Services ===== -->
+<section class="services" id="services">
+  <div class="wrap">
+    <div class="section-head center reveal">
+      <span class="eyebrow">What we do</span>
+      <h2>Everything your digital presence needs, under one roof.</h2>
+      <p>From first sketch to ongoing growth, we cover the full lifecycle of your website — so you're not juggling five different vendors.</p>
+    </div>
+    <div class="service-grid">
+      <div class="service-card reveal" style="--d:.05s">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 9h18M8 21h8M12 18v3"/></svg></div>
+        <h3>Web Design</h3>
+        <p>Custom, conversion-focused designs that reflect your brand and turn visitors into customers.</p>
+      </div>
+      <div class="service-card reveal" style="--d:.1s">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h8l-1 8 10-12h-8l1-8z"/></svg></div>
+        <h3>UX/UI Design</h3>
+        <p>Research-backed interfaces that are intuitive, accessible, and a genuine joy to use.</p>
+      </div>
+      <div class="service-card reveal" style="--d:.15s">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+        <h3>Web Development</h3>
+        <p>Fast, responsive, and reliably built sites — from landing pages to full platforms.</p>
+      </div>
+      <div class="service-card reveal" style="--d:.2s">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <h3>Brand &amp; Identity</h3>
+        <p>Logos, visual systems, and style guides that give your brand a distinct, consistent voice.</p>
+      </div>
+      <div class="service-card reveal" style="--d:.25s">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
+        <h3>Digital Growth &amp; SEO</h3>
+        <p>Ongoing optimization, content, and analytics that turn traffic into real, measurable growth.</p>
+      </div>
+      <div class="service-card reveal" style="--d:.3s">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4.5 8-11V5l-8-3-8 3v6c0 6.5 8 11 8 11z"/></svg></div>
+        <h3>Care &amp; Support</h3>
+        <p>Ongoing maintenance, updates, and support plans so your site keeps performing.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Process ===== -->
+<section class="process" id="process">
+  <div class="wrap">
+    <div class="section-head center reveal">
+      <span class="eyebrow">How we work</span>
+      <h2>A clear process, from kickoff to launch and beyond.</h2>
+      <p>No mystery, no black box. You'll always know what's happening and what's next.</p>
+    </div>
+    <div class="process-track">
+      <div class="process-step reveal" style="--d:.05s">
+        <div class="num">01</div>
+        <h3>Discover</h3>
+        <p>We dig into your goals, audience, and competitors to build a clear roadmap.</p>
+      </div>
+      <div class="process-step reveal" style="--d:.1s">
+        <div class="num">02</div>
+        <h3>Design</h3>
+        <p>Wireframes and visual concepts come to life, refined together until it feels right.</p>
+      </div>
+      <div class="process-step reveal" style="--d:.15s">
+        <div class="num">03</div>
+        <h3>Build</h3>
+        <p>We develop a fast, responsive, reliable site — tested across every device.</p>
+      </div>
+      <div class="process-step reveal" style="--d:.2s">
+        <div class="num">04</div>
+        <h3>Launch</h3>
+        <p>QA, testing, and a smooth go-live, so nothing falls through the cracks.</p>
+      </div>
+      <div class="process-step reveal" style="--d:.25s">
+        <div class="num">05</div>
+        <h3>Grow</h3>
+        <p>Post-launch, we track performance and optimize continuously to help you grow.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Testimonials ===== -->
+<section class="testimonials" id="testimonials">
+  <div class="wrap">
+    <div class="section-head center reveal">
+      <span class="eyebrow">Kind words</span>
+      <h2>What it's like to work with us.</h2>
+    </div>
+    <div class="t-slider reveal">
+      <div class="t-track" id="tTrack">
+        <div class="t-slide active">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.5 7C6.5 7 4 9.5 4 12.5S6.5 18 9.5 18c.3 0 .6 0 .9-.1-.7 1.6-2.1 2.9-4 3.6l.6 1.5c3.6-1.3 6-4.5 6-8.5V12c0-2.8-1.6-5-3.5-5zm9 0c-3 0-5.5 2.5-5.5 5.5s2.5 5.5 5.5 5.5c.3 0 .6 0 .9-.1-.7 1.6-2.1 2.9-4 3.6l.6 1.5c3.6-1.3 6-4.5 6-8.5V12c0-2.8-1.6-5-3.5-5z"/></svg>
+          <p>Working with UX Labs Pro felt like adding a design team to our company — not hiring an outside vendor. They asked the right questions before touching a single pixel.</p>
+          <div class="t-person">
+            <div class="t-avatar">SB</div>
+            <div class="who"><div class="name">Sarah Bennett</div><div class="role">Founder, Bloom &amp; Co. Studio</div></div>
+          </div>
+        </div>
+        <div class="t-slide">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.5 7C6.5 7 4 9.5 4 12.5S6.5 18 9.5 18c.3 0 .6 0 .9-.1-.7 1.6-2.1 2.9-4 3.6l.6 1.5c3.6-1.3 6-4.5 6-8.5V12c0-2.8-1.6-5-3.5-5zm9 0c-3 0-5.5 2.5-5.5 5.5s2.5 5.5 5.5 5.5c.3 0 .6 0 .9-.1-.7 1.6-2.1 2.9-4 3.6l.6 1.5c3.6-1.3 6-4.5 6-8.5V12c0-2.8-1.6-5-3.5-5z"/></svg>
+          <p>Our new site loads fast, looks sharp on every device, and our booking requests noticeably picked up in the first month. Exactly what we needed.</p>
+          <div class="t-person">
+            <div class="t-avatar">MA</div>
+            <div class="who"><div class="name">Marcus Alvarez</div><div class="role">Owner, Alvarez Home Services</div></div>
+          </div>
+        </div>
+        <div class="t-slide">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.5 7C6.5 7 4 9.5 4 12.5S6.5 18 9.5 18c.3 0 .6 0 .9-.1-.7 1.6-2.1 2.9-4 3.6l.6 1.5c3.6-1.3 6-4.5 6-8.5V12c0-2.8-1.6-5-3.5-5zm9 0c-3 0-5.5 2.5-5.5 5.5s2.5 5.5 5.5 5.5c.3 0 .6 0 .9-.1-.7 1.6-2.1 2.9-4 3.6l.6 1.5c3.6-1.3 6-4.5 6-8.5V12c0-2.8-1.6-5-3.5-5z"/></svg>
+          <p>What stood out was the communication. We always knew what stage we were at and never had to chase anyone for updates.</p>
+          <div class="t-person">
+            <div class="t-avatar">PN</div>
+            <div class="who"><div class="name">Priya Nair</div><div class="role">Marketing Lead, Northfield Retail Co.</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="t-dots" id="tDots"></div>
+      <p class="t-note">Sample quotes shown for layout — swap in real client testimonials before launch.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== About ===== -->
+<section class="about" id="about">
+  <div class="wrap about-grid">
+    <div class="about-copy reveal">
+      <span class="eyebrow">About us</span>
+      <h2 style="margin-top:16px">A small, founder-led studio that treats your project like our own.</h2>
+      <p>We're a web design &amp; digital growth partnership built on one idea: great design isn't just about how something looks — it's about how well it works.</p>
+      <p>We pair thoughtful UX with strategy built to grow your business, not just your bounce rate. No bloated teams, no hand-offs to strangers — just people who care about the outcome.</p>
+      <div class="value-list">
+        <div class="value-item">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+          <div><strong>Partnership-first</strong><span>We work alongside you, not just for you.</span></div>
+        </div>
+        <div class="value-item">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r=".5" fill="currentColor"/></svg></div>
+          <div><strong>Design with purpose</strong><span>Every decision ties back to your goals.</span></div>
+        </div>
+        <div class="value-item">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
+          <div><strong>Built to grow</strong><span>Sites that keep getting better after launch.</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="about-visual reveal" style="--d:.1s">
+      <img src="assets/logo-dark.png" alt="UX Labs Pro" class="logo-dark">
+      <img src="assets/logo-light.png" alt="UX Labs Pro" class="logo-light">
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA banner ===== -->
+<section class="cta-banner">
+  <div class="wrap">
+    <div class="cta-panel reveal">
+      <h2>Have a project in mind?</h2>
+      <p>Let's build something that works as good as it looks. Tell us a little about your business and we'll take it from there.</p>
+      <div class="cta-row">
+        <a href="#contact" class="btn btn-primary">Start a Project</a>
+        <a href="mailto:hello@uxlabs.pro" class="btn btn-ghost">Email us directly</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Contact ===== -->
+<section class="contact" id="contact">
+  <div class="wrap contact-grid">
+    <div class="contact-info reveal">
+      <span class="eyebrow">Get in touch</span>
+      <h2 style="margin-top:16px">Let's start the conversation.</h2>
+      <p>Tell us about your project — we'll get back to you within 1–2 business days.</p>
+      <div class="contact-links">
+        <a class="contact-link" href="mailto:hello@uxlabs.pro">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg></div>
+          <div><div class="label">Email</div><div class="value">hello@uxlabs.pro</div></div>
+        </a>
+        <a class="contact-link" href="tel:+12175681917">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+          <div><div class="label">Phone</div><div class="value">(217) 568-1917</div></div>
+        </a>
+      </div>
+    </div>
+    <form class="contact-form reveal" style="--d:.1s" id="contactForm">
+      <div class="form-row">
+        <label for="cf-name">Name</label>
+        <input id="cf-name" name="name" type="text" placeholder="Your name" required>
+      </div>
+      <div class="form-row">
+        <label for="cf-email">Email</label>
+        <input id="cf-email" name="email" type="email" placeholder="you@company.com" required>
+      </div>
+      <div class="form-row">
+        <label for="cf-message">Tell us about your project</label>
+        <textarea id="cf-message" name="message" rows="4" placeholder="What are you looking to build?" required></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Send message</button>
+      <p class="form-note">Opens your email client with the message pre-filled. Wire this up to a form service before launch if you'd rather not rely on that.</p>
+      <div class="form-success" id="formSuccess">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        Your email client should be opening now.
+      </div>
+    </form>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap footer-inner">
+    <div class="footer-brand">
+      <img src="assets/logo-dark.png" alt="UX Labs Pro" class="logo-dark">
+      <img src="assets/logo-light.png" alt="UX Labs Pro" class="logo-light">
+      <span>Web design &amp; digital growth</span>
+    </div>
+    <nav class="footer-links">
+      <a href="#services">Services</a>
+      <a href="#process">Process</a>
+      <a href="#testimonials">Testimonials</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <button class="to-top" id="toTop" type="button" aria-label="Back to top">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+    </button>
+  </div>
+  <div class="wrap" style="margin-top:24px">
+    <p style="margin:0;font-size:12.5px;color:var(--text-faint)">© <span id="year">2026</span> UX Labs Pro. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---- Theme toggle ---- */
+  var root = document.documentElement;
+  var themeBtn = document.getElementById('themeToggle');
+  function systemPrefersDark(){ return window.matchMedia('(prefers-color-scheme: dark)').matches; }
+  function applyStoredTheme(){
+    var stored = null;
+    try{ stored = localStorage.getItem('uxlp-theme'); }catch(e){}
+    if(stored === 'light' || stored === 'dark'){ root.setAttribute('data-theme', stored); }
+  }
+  applyStoredTheme();
+  if(themeBtn){
+    themeBtn.addEventListener('click', function(){
+      var current = root.getAttribute('data-theme');
+      var isDark = current ? current === 'dark' : systemPrefersDark();
+      var next = isDark ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      try{ localStorage.setItem('uxlp-theme', next); }catch(e){}
+    });
+  }
+
+  /* ---- Navbar scroll state ---- */
+  var navbar = document.getElementById('navbar');
+  function onScroll(){
+    if(window.scrollY > 12){ navbar.classList.add('scrolled'); }
+    else{ navbar.classList.remove('scrolled'); }
+  }
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive:true });
+
+  /* ---- Mobile menu ---- */
+  var burger = document.getElementById('navBurger');
+  var panel = document.getElementById('mobilePanel');
+  function closeMenu(){
+    burger.classList.remove('open');
+    burger.setAttribute('aria-expanded','false');
+    panel.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function toggleMenu(){
+    var open = panel.classList.toggle('open');
+    burger.classList.toggle('open', open);
+    burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+    document.body.style.overflow = open ? 'hidden' : '';
+  }
+  if(burger){ burger.addEventListener('click', toggleMenu); }
+  panel.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', closeMenu); });
+  window.addEventListener('keydown', function(e){ if(e.key === 'Escape'){ closeMenu(); } });
+
+  /* ---- Scroll reveal ---- */
+  var revealEls = document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window && !reduceMotion){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('in');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold:0.15, rootMargin:'0px 0px -8% 0px' });
+    revealEls.forEach(function(el){ io.observe(el); });
+  } else {
+    revealEls.forEach(function(el){ el.classList.add('in'); });
+  }
+
+  /* ---- Testimonial slider ---- */
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.t-slide'));
+  var dotsWrap = document.getElementById('tDots');
+  var current = 0;
+  var timer = null;
+  if(slides.length){
+    slides.forEach(function(_, i){
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.setAttribute('aria-label', 'Show testimonial ' + (i+1));
+      if(i === 0) b.classList.add('active');
+      b.addEventListener('click', function(){ show(i); restart(); });
+      dotsWrap.appendChild(b);
+    });
+    var dots = Array.prototype.slice.call(dotsWrap.children);
+    function show(i){
+      slides[current].classList.remove('active');
+      dots[current].classList.remove('active');
+      current = (i + slides.length) % slides.length;
+      slides[current].classList.add('active');
+      dots[current].classList.add('active');
+    }
+    function next(){ show(current + 1); }
+    function restart(){
+      if(timer) clearInterval(timer);
+      if(!reduceMotion){ timer = setInterval(next, 6000); }
+    }
+    var slider = document.querySelector('.t-slider');
+    slider.addEventListener('mouseenter', function(){ if(timer) clearInterval(timer); });
+    slider.addEventListener('mouseleave', restart);
+    restart();
+  }
+
+  /* ---- Contact form -> mailto ---- */
+  var form = document.getElementById('contactForm');
+  var success = document.getElementById('formSuccess');
+  if(form){
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      var name = form.name.value.trim();
+      var email = form.email.value.trim();
+      var message = form.message.value.trim();
+      var subject = encodeURIComponent('New project inquiry from ' + name);
+      var body = encodeURIComponent(message + '\n\n— ' + name + ' (' + email + ')');
+      window.location.href = 'mailto:hello@uxlabs.pro?subject=' + subject + '&body=' + body;
+      success.classList.add('show');
+    });
+  }
+
+  /* ---- Back to top ---- */
+  var toTop = document.getElementById('toTop');
+  if(toTop){
+    toTop.addEventListener('click', function(){
+      window.scrollTo({ top:0, behavior: reduceMotion ? 'auto' : 'smooth' });
+    });
+  }
+
+  /* ---- Footer year ---- */
+  var yearEl = document.getElementById('year');
+  if(yearEl){ yearEl.textContent = new Date().getFullYear(); }
+})();
+</script>
+
+</body>
+</html>
