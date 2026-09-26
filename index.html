@@ -160,8 +160,13 @@ h1,h2,h3,h4,h5,p{ margin:0; }
 .navbar{ --logo-h:120px; }
 .navbar.scrolled{ --logo-h:46px; }
 @media (max-width:520px){ .navbar{ --logo-h:70px; } .navbar.scrolled{ --logo-h:38px; } }
-.brand{ position:relative; align-self:stretch; width:calc(var(--logo-h) * 3.061); flex-shrink:0; transition:width .4s var(--ease); }
+.brand{ position:relative; align-self:stretch; width:calc(var(--logo-h) * 3.077); flex-shrink:0; transition:width .4s var(--ease); }
 .brand img{ position:absolute; left:0; top:0; height:var(--logo-h); width:auto; transition:transform .3s var(--ease), height .4s var(--ease); }
+/* Header logo swap: the sparkly logo at the top of the page, the clean logo once the header shrinks on scroll (crossfade) */
+.brand .logo-full, .brand .logo-mini{ transition:opacity .35s ease, transform .3s var(--ease), height .4s var(--ease); }
+.brand .logo-mini{ opacity:0; pointer-events:none; }
+.navbar.scrolled .brand .logo-full{ opacity:0; }
+.navbar.scrolled .brand .logo-mini{ opacity:1; }
 .brand:hover img{ transform:scale(1.04); }
 .nav-links{ display:flex; align-items:center; gap:clamp(20px,3.4vw,40px); }
 .nav-links a{ position:relative; font-size:14.5px; font-weight:500; color:var(--text-dim); padding:6px 0; transition:color .3s ease; }
@@ -733,7 +738,8 @@ footer{ position:relative; overflow-x:clip; }
 <header class="navbar" id="navbar">
   <div class="navbar-inner">
     <a href="#top" class="brand" aria-label="UX Labs Pro home">
-      <img src="assets/logo-v8.png" alt="UX Labs Pro" width="1200" height="392">
+      <img src="assets/logo-v9.png" alt="UX Labs Pro" width="1200" height="383" class="logo-full">
+      <img src="assets/logo-v10.png" alt="" width="1200" height="390" class="logo-mini" aria-hidden="true">
     </a>
     <nav class="nav-links" aria-label="Main">
       <a href="#top" class="active">Home</a>
@@ -1070,7 +1076,7 @@ footer{ position:relative; overflow-x:clip; }
   <div class="wrap">
     <div class="footer-inner">
       <a href="#top" class="footer-brand" aria-label="UX Labs Pro home">
-        <img src="assets/logo-v8.png" alt="UX Labs Pro" width="1200" height="392">
+        <img src="assets/logo-v10.png" alt="UX Labs Pro" width="1200" height="390">
       </a>
       <nav class="footer-links" aria-label="Footer">
         <a href="#top">Home</a>
@@ -1177,7 +1183,9 @@ footer{ position:relative; overflow-x:clip; }
 
   /* Scroll reveal */
   var calloutEl = document.querySelector('.callout.reveal');
-  var revealEls = Array.prototype.slice.call(document.querySelectorAll('.reveal')).filter(function(el){ return el !== calloutEl; });
+  /* Hero elements animate in on page load (staggered by their --d delays), never waiting on scroll or viewport entry */
+  var heroEls = Array.prototype.slice.call(document.querySelectorAll('.hero .reveal'));
+  var revealEls = Array.prototype.slice.call(document.querySelectorAll('.reveal')).filter(function(el){ return el !== calloutEl && heroEls.indexOf(el) === -1; });
   if('IntersectionObserver' in window && !reduceMotion){
     var io = new IntersectionObserver(function(entries){
       entries.forEach(function(entry){
@@ -1188,6 +1196,8 @@ footer{ position:relative; overflow-x:clip; }
   } else {
     revealEls.forEach(function(el){ el.classList.add('in'); });
   }
+  if(reduceMotion){ heroEls.forEach(function(el){ el.classList.add('in'); }); }
+  else{ requestAnimationFrame(function(){ requestAnimationFrame(function(){ heroEls.forEach(function(el){ el.classList.add('in'); }); }); }); }
   /* Callout loads in immediately on page load instead of waiting for scroll */
   if(calloutEl){
     if(reduceMotion){ calloutEl.classList.add('in'); }
