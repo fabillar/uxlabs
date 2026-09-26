@@ -269,7 +269,7 @@ h1,h2,h3,h4,h5,p{ margin:0; }
   .hero-copy{ align-items:center; text-align:center; }
   .cta-row{ justify-content:center; }
   .feat-row{ margin-inline:auto; }
-  .dev-wrap{ height:clamp(360px,72vw,520px); margin-top:26px; }
+  .dev-wrap{ width:80%; height:calc(clamp(360px,72vw,520px) * .8); margin:26px auto 0; order:-1; } /* 80% size on mobile: width and height shrink together (no transform, so .reveal.in can't override it) */
 }
 @media (max-width:520px){
   .feat{ padding:0 7px; font-size:11.5px; }
@@ -467,7 +467,7 @@ h1,h2,h3,h4,h5,p{ margin:0; }
 @media (prefers-reduced-motion: reduce){ .p-card::before{ animation:none !important; } }
 .p-card .num{ position:absolute; left:calc(10px * var(--s)); top:calc(-14px * var(--s)); width:calc(54px * var(--s)); height:calc(54px * var(--s)); border-radius:50%; font-size:calc(17px * var(--s)); font-weight:800; color:#fff; display:flex; align-items:center; justify-content:center;
   background:var(--bg-g); border:3px solid var(--card); box-shadow:0 12px 20px -8px var(--g); }
-.p-step h3{ font-size:calc(20px * var(--s)); font-weight:800; margin-bottom:4px; letter-spacing:-.01em; }
+.p-step h3{ font-family:'Caveat',cursive; font-size:clamp(24px,2.2vw,30px); /* 30px on desktop, scales down on smaller screens */ font-weight:700; line-height:1.05; margin-bottom:2px; letter-spacing:0; text-wrap:balance; }
 .p-step p{ color:var(--text-dim); font-size:max(12.5px, calc(14px * var(--s))); line-height:1.55; max-width:24ch; margin-inline:auto; }
 .n1{ --c:#ff8fc9; --c2:#c9a6ff; --dk:#a2338f; --bg-g:linear-gradient(140deg,#ff8fc9,#ec3a97); --g:rgba(236,58,151,.55); }
 .n2{ --c:#ffb27a; --c2:#ff9fd6; --dk:#c2482e; --bg-g:linear-gradient(140deg,#ffc56b,#ff8a3d); --g:rgba(255,138,61,.55); }
@@ -480,6 +480,7 @@ h1,h2,h3,h4,h5,p{ margin:0; }
   .steps{ grid-template-columns:1fr; gap:calc(44px * var(--s)); }
   .p-step:nth-child(n){ margin-top:0; }
   .p-char{ height:calc(140px * var(--s)); }
+  .p-step h3{ font-size:clamp(26px,7vw,30px); }
 }
 @media (max-width:1000px) and (min-width:821px){ .p-card{ padding-inline:calc(20px * var(--s)); } }
 
