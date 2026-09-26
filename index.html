@@ -1201,24 +1201,29 @@ footer{ position:relative; overflow-x:clip; }
 
 
 
-  /* Mobile hero: scale the whole monitor block down (contents and all, so nothing overlaps) just enough for the "Get a Free Quote" row to sit on the first screen. Uses the standalone `scale` property (the .reveal rules only touch `transform`) and pulls the text up by exactly the space the shrink frees. */
+  /* Mobile hero: the monitor always keeps its full width. If the "Get a Free Quote" row would sit below the first screen, the monitor block gets shorter instead: the tablet and phone (anchored to its bottom) slide up and overlap the monitor. It never gets shorter than the monitor itself. */
   (function(){
-    var dev = document.querySelector('.dev-wrap'), cta = document.querySelector('.hero .cta-row');
-    if(!dev || !cta) return;
+    var dev = document.querySelector('.dev-wrap'), mon = dev && dev.querySelector('.monitor'), cta = document.querySelector('.hero .cta-row');
+    if(!dev || !mon || !cta) return;
     var mq = window.matchMedia('(max-width:960px)'), lastW = -1;
-    function reset(){ dev.style.scale = ''; dev.style.marginBottom = ''; dev.style.transformOrigin = ''; }
     function fit(force){
       var w = window.innerWidth;
       if(!force && w === lastW) return;            /* ignore height-only resizes (mobile URL bar showing/hiding) so it never jumps */
       lastW = w;
-      reset();
+      dev.style.height = '';
       if(!mq.matches) return;
-      var over = cta.getBoundingClientRect().bottom - (window.innerHeight - 20);   /* how far the buttons sit below the fold */
-      if(over <= 0) return;                        /* already fits at full size */
-      var H = dev.offsetHeight, k = Math.max(0.5, (H - over) / H);
-      dev.style.transformOrigin = '50% 0';
-      dev.style.scale = k;
-      dev.style.marginBottom = (-(1 - k) * H) + 'px';
+      var target = window.innerHeight - 20;
+      var over = cta.getBoundingClientRect().bottom - target;
+      if(over <= 0) return;                        /* already fits at full height */
+      var h = dev.offsetHeight - over;
+      for(var n = 0; n < 3; n++){                  /* the monitor's top offset is a % of the height, so settle it in a few passes */
+        dev.style.height = h + 'px';
+        var minH = mon.offsetTop + mon.offsetHeight + 4;   /* monitor bottom edge: don't go shorter than the monitor itself */
+        var want = Math.max(minH, h);
+        if(Math.abs(want - h) < 0.5) break;
+        h = want;
+      }
+      dev.style.height = Math.round(h) + 'px';
     }
     fit(true);
     window.addEventListener('resize', function(){ fit(false); });
