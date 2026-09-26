@@ -118,10 +118,6 @@ h1,h2,h3,h4,h5,p{ margin:0; }
 /* Reveal */
 .reveal{ opacity:0; transform:translateY(26px); transition:opacity .8s var(--ease), transform .8s var(--ease); transition-delay:var(--d,0s); }
 .reveal.in{ opacity:1; transform:translateY(0); }
-@media (max-width:760px){
-  .reveal{ transform:translateY(34px) scale(.92); transition:opacity .5s ease-out, transform .95s cubic-bezier(.34,1.56,.64,1) !important; transition-delay:var(--d,0s); }
-  .reveal.in{ transform:translateY(0) scale(1); }
-}
 
 /* Decorations */
 .deco{ position:absolute; pointer-events:none; z-index:0; }
@@ -142,12 +138,8 @@ h1,h2,h3,h4,h5,p{ margin:0; }
   border-bottom-color:var(--card-border); box-shadow:0 10px 30px -18px rgba(var(--shadow),0.35);
 }
 .navbar-inner{ max-width:var(--maxw); margin-inline:auto; display:flex; align-items:center; justify-content:space-between; gap:24px; }
-/* Logo is taken out of the flow (absolute) so its size never changes the header height; the bar is sized by the nav items only. It hangs down from the top of the bar. */
-.navbar{ --logo-h:120px; }
-.navbar.scrolled{ --logo-h:46px; }
-@media (max-width:520px){ .navbar{ --logo-h:70px; } .navbar.scrolled{ --logo-h:38px; } }
-.brand{ position:relative; align-self:stretch; width:calc(var(--logo-h) * 3.061); flex-shrink:0; transition:width .4s var(--ease); }
-.brand img{ position:absolute; left:0; top:0; height:var(--logo-h); width:auto; transition:transform .3s var(--ease), height .4s var(--ease); }
+.brand{ display:flex; align-items:center; }
+.brand img{ height:34px; width:auto; transition:transform .3s var(--ease); }
 .brand:hover img{ transform:scale(1.04); }
 .nav-links{ display:flex; align-items:center; gap:clamp(20px,3.4vw,40px); }
 .nav-links a{ position:relative; font-size:14.5px; font-weight:500; color:var(--text-dim); padding:6px 0; transition:color .3s ease; }
@@ -192,7 +184,7 @@ h1,h2,h3,h4,h5,p{ margin:0; }
 .hero-copy{ display:flex; flex-direction:column; align-items:flex-start; gap:20px; position:relative; z-index:3; }
 .hero h1{ font-weight:800; font-size:clamp(35px,4.6vw,62px); line-height:1.05; letter-spacing:-0.03em; }
 .hero h1 .line{ display:block; white-space:nowrap; }
-.hero h1 .line.tag{ font-family:'Caveat',cursive; font-size:.85em; font-weight:700; letter-spacing:-2px; line-height:1; margin-top:.16em; color:#6a5f9a; }
+.hero h1 .line.tag{ font-size:.5em; font-weight:700; letter-spacing:-0.015em; line-height:1.3; margin-top:.28em; }
 .hero .sub{ color:var(--text); opacity:.82; font-size:clamp(15.5px,1.8vw,19px); line-height:1.6; max-width:23em; }
 .cta-row{ display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-top:2px; }
 .feat-row{ display:grid; grid-template-columns:repeat(4,auto); margin-top:14px; width:100%; max-width:500px; }
@@ -264,7 +256,7 @@ h1,h2,h3,h4,h5,p{ margin:0; }
   .cta-row .btn-outline{ padding:12.5px 20px; }
 }
 @media (max-width:400px){ .hero h1{ font-size:32px; } }
-@media (max-width:480px){ .hero h1 .line.tag{ font-size:calc(9vw - 5px); } }
+@media (max-width:420px){ .hero h1 .line.tag{ font-size:.47em; } }
 @media (max-width:640px){ .dev-wrap .script{ display:none; } }
 
 /* ---------- Callout ---------- */
@@ -338,136 +330,35 @@ h1,h2,h3,h4,h5,p{ margin:0; }
 @media (max-width:480px){ .s4{ grid-template-columns:1fr; } }
 
 /* ---------- Process ---------- */
-.process{ padding-block:clamp(40px,6vw,70px); --s:.82; /* scale of the character + card steps (1 = original size) */ }
+.process{ padding-block:clamp(40px,6vw,70px); }
 .process .deco.blob-l{ left:-12%; top:30%; width:clamp(240px,32vw,440px); aspect-ratio:1.1; border-radius:52% 48% 60% 40% / 50% 44% 56% 50%; background:linear-gradient(150deg, color-mix(in srgb, var(--lavender) 55%, transparent), color-mix(in srgb, var(--pink) 30%, transparent)); }
 .path{ position:relative; z-index:1; }
-.path svg.curve{ position:absolute; left:0; top:calc(clamp(110px,11.5vw,155px) * var(--s)); width:100%; height:calc(120px * var(--s)); overflow:visible; pointer-events:none; }
-.path svg.curve path{ fill:none; stroke:var(--lavender); stroke-width:2.6; stroke-dasharray:1 9; stroke-linecap:round; vector-effect:non-scaling-stroke; opacity:.9; }
-.steps{ display:grid; grid-template-columns:repeat(4,1fr); gap:22px; position:relative; align-items:start; }
-.p-step{ display:flex; flex-direction:column; align-items:center; text-align:center; --tint:color-mix(in srgb, var(--c) 15%, var(--card)); }
-/* Uxxie sits on top of each card; the card overlaps the (cropped) bottom of the character */
-.p-char{ position:relative; z-index:1; display:block; height:calc(clamp(120px,12vw,165px) * var(--s)); width:auto; max-width:100%; margin-bottom:calc(-6px * var(--s)); filter:drop-shadow(0 16px 18px rgba(var(--shadow),.22)); transition:transform .5s var(--ease); }
-/* staggered wave: steps sit at different heights along the dotted line */
-.p-step:nth-child(1){ margin-top:calc(12px * var(--s)); }
-.p-step:nth-child(2), .p-step:nth-child(3){ margin-top:calc(48px * var(--s)); }
-.p-step:hover .p-char{ transform:translateY(-6px) scale(1.03); }
-/* Uxxie peeks out on its own, one after another (1, then 2, then 3, then 4) and the round repeats. Each peek is ~1.3s and they follow each other; the whole round is 5.2s. */
-.p-char{ transform-origin:50% 100%; animation:uxxie-peek 5.2s infinite; }
-.p-step:nth-child(1) .p-char{ animation-delay:0s; }
-.p-step:nth-child(2) .p-char{ animation-delay:1.3s; }
-.p-step:nth-child(3) .p-char{ animation-delay:2.6s; }
-.p-step:nth-child(4) .p-char{ animation-delay:3.9s; }
-@keyframes uxxie-peek{
-  /* same rubber-band motion (about 1.26s), squeezed into a 5.2s loop so the four characters go back-to-back with no waiting */
-  0%{ translate:0 0; scale:1 1; animation-timing-function:cubic-bezier(.3,.1,.3,1); }
-  8.1%{ translate:0 -14px; scale:.93 1.16; animation-timing-function:cubic-bezier(.5,0,.6,1); }
-  15%{ translate:0 0; scale:1.06 .93; animation-timing-function:ease-in-out; }
-  19.6%{ translate:0 -2px; scale:.98 1.03; animation-timing-function:ease-in-out; }
-  24.2%,100%{ translate:0 0; scale:1 1; }
-}
-/* Sparkle burst when hovering a step */
-.bwrap{ position:relative; display:inline-flex; }
-.bwrap > .btn{ z-index:1; }
-.bwrap .burst{ --w:#b46bff; }
-.p-step .burst{ --w:#fff; }
-.p-step:nth-child(even) .burst{ --w:#b46bff; }
-.burst{ position:absolute; left:50%; top:50%; width:0; height:0; pointer-events:none; z-index:0; } /* behind Uxxie (z 1) and the card (z 2), centered on the whole step */
-.burst svg{ position:absolute; left:calc(var(--z) * -.5px); top:calc(var(--z) * -.5px); width:calc(var(--z) * 1px * var(--s,1)); height:calc(var(--z) * 1px * var(--s,1)); fill:var(--c); opacity:0; filter:drop-shadow(0 2px 4px rgba(120,30,110,.35)); transform:scale(0); }
-/* The process sparkles now burst in time with the character peeking (same 5.2s loop, same 1.3s step offsets), not on hover */
-.p-step:nth-child(1){ --i:0; } .p-step:nth-child(2){ --i:1; } .p-step:nth-child(3){ --i:2; } .p-step:nth-child(4){ --i:3; }
-.p-step .burst svg{ animation:sparkle-burst-loop 5.2s cubic-bezier(.2,.9,.3,1.2) calc(var(--i) * 1.3s + var(--dl)) infinite both; }
-/* Hero "Get a Free Quote" button: the exact same burst as the step cards (spin out from behind the button), but it holds at the burst positions for as long as the button is hovered instead of fading away */
-.bwrap:hover .burst svg{ animation:sparkle-burst-hold .57s cubic-bezier(.2,.9,.3,1.2) var(--dl) both; }
-/* twinkle runs on the inner shape, ALL the time (the sparkles are invisible until hover), each at its own speed and already partway through its fade (negative delay), so when the burst reveals them they're already twinkling */
-.bwrap .burst svg use{ animation:sparkle-twinkle var(--td,1.6s) ease-in-out calc(var(--tl,.8s) * -1) infinite; }
-/* after the burst lands, each sparkle twinkles (each at its own pace so they never blink in sync) */
-@keyframes sparkle-twinkle{ 0%,100%{ opacity:1; } 50%{ opacity:.06; } }
-@keyframes sparkle-burst-hold{
-  0%{ opacity:0; transform:translate(0,0) scale(0) rotate(0deg); }
-  25%{ opacity:1; }
-  100%{ opacity:1; transform:translate(var(--dx),var(--dy)) scale(1.15) rotate(150deg); }
-}
-@keyframes sparkle-burst-loop{
-  0%{ opacity:0; transform:translate(0,0) scale(0) rotate(0deg); }
-  2.7%{ opacity:1; }
-  11%{ opacity:1; transform:translate(var(--dx),var(--dy)) scale(1.15) rotate(150deg); }
-  18.3%,100%{ opacity:0; transform:translate(calc(var(--dx) * 1.18),calc(var(--dy) * 1.18 + 14px)) scale(.2) rotate(260deg); }
-}
-@keyframes sparkle-burst{
-  0%{ opacity:0; transform:translate(0,0) scale(0) rotate(0deg); }
-  15%{ opacity:1; }
-  60%{ opacity:1; transform:translate(var(--dx),var(--dy)) scale(1.15) rotate(150deg); }
-  100%{ opacity:0; transform:translate(calc(var(--dx) * 1.18),calc(var(--dy) * 1.18 + 14px)) scale(.2) rotate(260deg); }
-}
-@media (prefers-reduced-motion: reduce){ .burst{ display:none; } }
-@media (prefers-reduced-motion: reduce){ .p-char{ animation:none !important; } }
-.p-card{ position:relative; z-index:2; width:100%; max-width:calc(258px * var(--s)); min-height:calc(150px * var(--s)); padding:calc(26px * var(--s)) calc(30px * var(--s)) calc(22px * var(--s)); display:flex; align-items:center; justify-content:center; }
-/* The card's shape is a separate layer that morphs like the jello background blobs, so the text never distorts */
-.p-card::before{ content:""; position:absolute; inset:calc(-8px * var(--s)) calc(-10px * var(--s)); z-index:-1; pointer-events:none; border-radius:58% 42% 52% 48% / 55% 50% 50% 45%; background:linear-gradient(140deg, color-mix(in srgb, var(--c) 10%, #fff) 0%, color-mix(in srgb, var(--c) 34%, #fff) 55%, color-mix(in srgb, var(--c2) 44%, #fff) 100%); border:1px solid color-mix(in srgb, var(--c) 22%, transparent);
-  box-shadow:0 22px 40px -26px var(--g); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); animation:card-blob-a 3.6s ease-in-out infinite; }
-.p-step:nth-child(2) .p-card::before{ animation-name:card-blob-b; animation-duration:4.2s; animation-delay:-1.4s; }
-.p-step:nth-child(3) .p-card::before{ animation-name:card-blob-c; animation-duration:3.3s; animation-delay:-2.2s; }
-.p-step:nth-child(4) .p-card::before{ animation-name:card-blob-d; animation-duration:3.9s; animation-delay:-.7s; }
-/* Bouncy, playful motion: squash down, spring up with a stretch, overshoot, settle, repeat (each card has its own rhythm) */
-@keyframes card-blob-a{
-  0%,100%{ translate:0 0; scale:1 1; rotate:0deg; border-radius:58% 42% 52% 48% / 55% 50% 50% 45%; }
-  14%{ translate:0 5%; scale:1.1 .86; rotate:-1deg; border-radius:50% 50% 46% 54% / 40% 42% 58% 60%; animation-timing-function:cubic-bezier(.3,1.7,.5,1); }
-  32%{ translate:-2% -13%; scale:.9 1.16; rotate:3deg; border-radius:42% 58% 60% 40% / 62% 56% 44% 38%; animation-timing-function:cubic-bezier(.5,0,.8,.5); }
-  48%{ translate:1% 4%; scale:1.12 .85; rotate:-2deg; border-radius:60% 40% 44% 56% / 44% 40% 60% 56%; animation-timing-function:cubic-bezier(.3,1.7,.5,1); }
-  64%{ translate:1% -6%; scale:.95 1.07; rotate:1.5deg; border-radius:46% 54% 56% 44% / 56% 52% 48% 44%; animation-timing-function:ease-in-out; }
-  80%{ translate:0 1%; scale:1.04 .96; rotate:-.5deg; }
-}
-@keyframes card-blob-b{
-  0%,100%{ translate:0 0; scale:1 1; rotate:0deg; border-radius:44% 56% 48% 52% / 60% 44% 56% 40%; }
-  16%{ translate:0 6%; scale:1.12 .84; rotate:1.5deg; border-radius:54% 46% 40% 60% / 42% 46% 54% 58%; animation-timing-function:cubic-bezier(.3,1.7,.5,1); }
-  34%{ translate:2% -14%; scale:.88 1.18; rotate:-3deg; border-radius:60% 40% 50% 50% / 38% 64% 36% 62%; animation-timing-function:cubic-bezier(.5,0,.8,.5); }
-  50%{ translate:-1% 5%; scale:1.1 .87; rotate:2deg; border-radius:40% 60% 58% 42% / 58% 40% 60% 42%; animation-timing-function:cubic-bezier(.3,1.7,.5,1); }
-  66%{ translate:-1% -5%; scale:.96 1.06; rotate:-1.5deg; animation-timing-function:ease-in-out; }
-  82%{ translate:0 1%; scale:1.03 .97; }
-}
-@keyframes card-blob-c{
-  0%,100%{ translate:0 0; scale:1 1; rotate:0deg; border-radius:52% 48% 40% 60% / 46% 56% 44% 54%; }
-  12%{ translate:0 4%; scale:1.09 .88; rotate:1deg; border-radius:46% 54% 52% 48% / 38% 44% 56% 62%; animation-timing-function:cubic-bezier(.3,1.7,.5,1); }
-  28%{ translate:-3% -12%; scale:.9 1.15; rotate:-4deg; border-radius:38% 62% 58% 42% / 60% 58% 42% 40%; animation-timing-function:cubic-bezier(.5,0,.8,.5); }
-  44%{ translate:2% 5%; scale:1.13 .85; rotate:2.5deg; border-radius:60% 40% 44% 56% / 46% 38% 62% 54%; animation-timing-function:cubic-bezier(.3,1.7,.5,1); }
-  60%{ translate:0 -7%; scale:.94 1.09; rotate:-1deg; border-radius:48% 52% 60% 40% / 56% 54% 46% 44%; animation-timing-function:ease-in-out; }
-  78%{ translate:1% 1%; scale:1.04 .96; rotate:.5deg; }
-}
-@keyframes card-blob-d{
-  0%,100%{ translate:0 0; scale:1 1; rotate:0deg; border-radius:60% 40% 56% 44% / 42% 58% 42% 58%; }
-  15%{ translate:0 5%; scale:1.11 .85; rotate:-1.5deg; border-radius:48% 52% 44% 56% / 40% 40% 60% 60%; animation-timing-function:cubic-bezier(.3,1.7,.5,1); }
-  33%{ translate:3% -13%; scale:.89 1.17; rotate:3.5deg; border-radius:40% 60% 62% 38% / 64% 54% 46% 36%; animation-timing-function:cubic-bezier(.5,0,.8,.5); }
-  49%{ translate:-2% 4%; scale:1.12 .86; rotate:-2deg; border-radius:58% 42% 40% 60% / 44% 42% 58% 56%; animation-timing-function:cubic-bezier(.3,1.7,.5,1); }
-  65%{ translate:0 -6%; scale:.95 1.08; rotate:1deg; animation-timing-function:ease-in-out; }
-  81%{ translate:0 1%; scale:1.03 .97; }
-}
-/* Alternating shades, each card keeps its own color: 1 = the hero shape's exact gradient with light text, 2 = light peach, 3 = grape (violet to magenta) with light text, 4 = light teal.
-   Colors are fixed so it looks the same in both site themes. */
-.p-step h3{ color:#2a1026; }
-.p-step p{ color:#6d4a66; }
-.p-step:nth-child(odd) h3{ color:#fff; text-shadow:0 1px 8px rgba(90,20,70,.35); }
-.p-step:nth-child(odd) p{ color:#fff; text-shadow:0 1px 8px rgba(90,20,70,.35); }
-.p-step:nth-child(odd) .p-card::before{ border-color:rgba(255,255,255,.24); }
-.p-step:nth-child(1) .p-card::before{ background:var(--hblob); /* exactly the hero shape's gradient */ box-shadow:0 26px 44px -20px rgba(242,86,159,.55), inset 0 1px 0 rgba(255,255,255,.3); }
-.p-step:nth-child(3) .p-card::before{ background:linear-gradient(160deg,#7f5cf5 0%,#b04fe0 50%,#ec4c9c 100%); /* grape: violet to magenta */ box-shadow:0 26px 44px -20px rgba(176,79,224,.55), inset 0 1px 0 rgba(255,255,255,.3); }
-@media (prefers-reduced-motion: reduce){ .p-card::before{ animation:none !important; } }
-.p-card .num{ position:absolute; left:calc(10px * var(--s)); top:calc(-14px * var(--s)); width:calc(54px * var(--s)); height:calc(54px * var(--s)); border-radius:50%; font-size:calc(17px * var(--s)); font-weight:800; color:#fff; display:flex; align-items:center; justify-content:center;
-  background:var(--bg-g); border:3px solid var(--card); box-shadow:0 12px 20px -8px var(--g); }
-.p-step h3{ font-size:calc(20px * var(--s)); font-weight:800; margin-bottom:4px; letter-spacing:-.01em; }
-.p-step p{ color:var(--text-dim); font-size:max(12.5px, calc(14px * var(--s))); line-height:1.55; max-width:24ch; margin-inline:auto; }
-.n1{ --c:#ff8fc9; --c2:#c9a6ff; --dk:#a2338f; --bg-g:linear-gradient(140deg,#ff8fc9,#ec3a97); --g:rgba(236,58,151,.55); }
-.n2{ --c:#ffb27a; --c2:#ff9fd6; --dk:#c2482e; --bg-g:linear-gradient(140deg,#ffc56b,#ff8a3d); --g:rgba(255,138,61,.55); }
-.n3{ --c:#ffb455; --c2:#ff9fd6; --dk:#c2482e; --bg-g:linear-gradient(140deg,#b48cf2,#9d47ea); --g:rgba(157,71,234,.55); }
-.n4{ --c:#4fd6c4; --c2:#7cc8f5; --dk:#1a7f8f; --bg-g:linear-gradient(140deg,#5fe0d0,#2aa5d0); --g:rgba(42,165,208,.55); }
+.path svg.curve{ position:absolute; left:0; top:20px; width:100%; height:140px; overflow:visible; pointer-events:none; }
+.path svg.curve path{ fill:none; stroke:var(--lavender); stroke-width:2; stroke-dasharray:3 8; stroke-linecap:round; vector-effect:non-scaling-stroke; opacity:.9; }
+.steps{ display:grid; grid-template-columns:repeat(4,1fr); gap:18px; position:relative; }
+.p-step{ display:flex; flex-direction:column; align-items:flex-start; gap:8px; padding-top:0; }
+.p-step:nth-child(2), .p-step:nth-child(3){ padding-top:36px; }
+.node{ position:relative; width:88px; height:88px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; margin-bottom:10px;
+  box-shadow:0 0 0 8px rgba(255,255,255,.55), 0 22px 34px -14px var(--g); background:var(--bg-g); }
+:root[data-theme="dark"] .node{ box-shadow:0 0 0 8px rgba(255,255,255,.08), 0 22px 34px -14px var(--g); }
+.node .ic{ width:36px; height:36px; stroke-width:1.8; }
+.node .num{ position:absolute; left:-4px; bottom:-8px; width:28px; height:28px; border-radius:50%; font-size:11.5px; font-weight:700; display:flex; align-items:center; justify-content:center;
+  background:var(--bg-g); border:3px solid var(--card); box-shadow:0 8px 14px -6px var(--g); }
+.p-step h3{ font-size:19px; font-weight:700; margin-top:6px; }
+.p-step p{ color:var(--text-dim); font-size:14px; line-height:1.65; max-width:20ch; }
+.n1{ --bg-g:linear-gradient(140deg,#ff8fc9,#ec3a97); --g:rgba(236,58,151,.55); }
+.n2{ --bg-g:linear-gradient(140deg,#c08bff,#8a44e6); --g:rgba(138,68,230,.55); }
+.n3{ --bg-g:linear-gradient(140deg,#ffc56b,#ff8a3d); --g:rgba(255,138,61,.55); }
+.n4{ --bg-g:linear-gradient(140deg,#6fb0ff,#3f6fff); --g:rgba(63,111,255,.55); }
 @media (max-width:820px){
-  .steps{ max-width:calc(360px * var(--s)); margin-inline:auto; }
-  .p-card{ max-width:none; }
   .path svg.curve{ display:none; }
-  .steps{ grid-template-columns:1fr; gap:calc(44px * var(--s)); }
-  .p-step:nth-child(n){ margin-top:0; }
-  .p-char{ height:calc(140px * var(--s)); }
+  .steps{ grid-template-columns:1fr; gap:26px; }
+  .p-step:nth-child(n){ padding-top:0; flex-direction:row; align-items:center; gap:18px; flex-wrap:wrap; }
+  .p-step .txt{ flex:1 1 180px; }
+  .p-step h3{ margin-top:0; }
+  .node{ margin-bottom:0; flex-shrink:0; }
+  .p-step p{ max-width:none; }
 }
-@media (max-width:1000px) and (min-width:821px){ .p-card{ padding-inline:calc(20px * var(--s)); } }
 
 /* ---------- Testimonials ---------- */
 .feedback{ padding-block:clamp(40px,6vw,70px); }
@@ -509,16 +400,11 @@ h1,h2,h3,h4,h5,p{ margin:0; }
 .reach a{ font-weight:600; border-bottom:1px solid rgba(255,255,255,.5); }
 .reach a:hover{ border-bottom-color:#fff; }
 @media (max-width:860px){ .cta-grid{ grid-template-columns:1fr; } }
-/* Mobile: the stretched wave SVG gets steep and wobbly on tall/narrow sections, so use a straight-edged gradient band instead */
-@media (max-width:700px){
-  .cta-bg{ display:none; }
-  .cta{ background:linear-gradient(135deg,#ee3d9a 0%,#a349ea 55%,#7f63f4 100%); }
-}
 
 /* ---------- Footer ---------- */
 footer{ padding-block:34px 30px; }
 .footer-inner{ display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap; }
-.footer-brand img{ height:90px; width:auto; }
+.footer-brand img{ height:40px; width:auto; }
 .footer-links{ display:flex; gap:clamp(18px,3vw,34px); flex-wrap:wrap; }
 .footer-links a{ font-size:13.5px; color:var(--text-dim); transition:color .3s ease; }
 .footer-links a:hover{ color:var(--magenta); }
@@ -584,7 +470,7 @@ footer{ padding-block:34px 30px; }
 @keyframes sp-bob{ from{ translate:0 0; } to{ translate:5px -9px; } }
 @keyframes sd-pulse{ 0%,100%{ transform:scale(.5); opacity:.4; } 50%{ transform:scale(1.4); opacity:1; } }
 footer{ position:relative; overflow-x:clip; }
-@media (max-width:640px){ :root{ --z:.72; } .xm{ display:none; } .hero-dots{ display:none; } .hero .sp.hero-mid, .hero .sd.hero-mid{ display:none; } }
+@media (max-width:640px){ :root{ --z:.72; } .xm{ display:none; } }
 
 /* ---------- Floating scroll-to-top button ---------- */
 .to-top{
@@ -718,7 +604,8 @@ footer{ position:relative; overflow-x:clip; }
 <header class="navbar" id="navbar">
   <div class="navbar-inner">
     <a href="#top" class="brand" aria-label="UX Labs Pro home">
-      <img src="assets/logo-v8.png" alt="UX Labs Pro" width="1200" height="392">
+      <img src="assets/logo-dark.png" alt="UX Labs Pro" class="logo-dark">
+      <img src="assets/logo-light.png" alt="UX Labs Pro" class="logo-light">
     </a>
     <nav class="nav-links" aria-label="Main">
       <a href="#top" class="active">Home</a>
@@ -750,29 +637,29 @@ footer{ position:relative; overflow-x:clip; }
 <!-- ===== Hero ===== -->
 <section class="hero">
   <span class="hero-dots" aria-hidden="true"></span>
-  <svg class="sp hero-mid" viewBox="0 0 24 24" aria-hidden="true" style="left:47%;top:14%;--s:28;--c:#ec3a97;--dl:0s;--dur:3.2s"><use href="#sparkle"/></svg>
+  <svg class="sp" viewBox="0 0 24 24" aria-hidden="true" style="left:47%;top:14%;--s:28;--c:#ec3a97;--dl:0s;--dur:3.2s"><use href="#sparkle"/></svg>
   <svg class="sp xm" viewBox="0 0 24 24" aria-hidden="true" style="left:53%;top:7%;--s:14;--c:#ffb020;--dl:0.6s;--dur:2.6s"><use href="#sparkle"/></svg>
   <svg class="sp" viewBox="0 0 24 24" aria-hidden="true" style="left:92%;top:22%;--s:32;--c:#9d47ea;--dl:0.3s;--dur:3.6s"><use href="#sparkle"/></svg>
-  <svg class="sp hero-mid" viewBox="0 0 24 24" aria-hidden="true" style="right:1.5%;top:58%;--s:16;--c:#ff8fc9;--dl:1.1s;--dur:2.8s"><use href="#sparkle"/></svg>
-  <svg class="sp hero-mid" viewBox="0 0 24 24" aria-hidden="true" style="left:45%;top:56%;--s:20;--c:#ffb020;--dl:1.7s;--dur:3.4s"><use href="#sparkle"/></svg>
+  <svg class="sp" viewBox="0 0 24 24" aria-hidden="true" style="right:1.5%;top:58%;--s:16;--c:#ff8fc9;--dl:1.1s;--dur:2.8s"><use href="#sparkle"/></svg>
+  <svg class="sp" viewBox="0 0 24 24" aria-hidden="true" style="left:45%;top:56%;--s:20;--c:#ffb020;--dl:1.7s;--dur:3.4s"><use href="#sparkle"/></svg>
   <svg class="sp" viewBox="0 0 24 24" aria-hidden="true" style="left:60%;top:92%;--s:24;--c:#9d47ea;--dl:0.9s;--dur:3.0s"><use href="#sparkle"/></svg>
   <svg class="sp xm" viewBox="0 0 24 24" aria-hidden="true" style="left:85%;top:90%;--s:15;--c:#ec3a97;--dl:2.0s;--dur:2.5s"><use href="#sparkle"/></svg>
   <svg class="sp" viewBox="0 0 24 24" aria-hidden="true" style="left:3%;top:16%;--s:18;--c:#9d47ea;--dl:1.3s;--dur:3.3s"><use href="#sparkle"/></svg>
   <svg class="sp" viewBox="0 0 24 24" aria-hidden="true" style="left:3%;top:84%;--s:24;--c:#ffb020;--dl:0.2s;--dur:3.8s"><use href="#sparkle"/></svg>
   <svg class="sp xm" viewBox="0 0 24 24" aria-hidden="true" style="left:26%;top:6%;--s:14;--c:#ff8fc9;--dl:2.3s;--dur:2.9s"><use href="#sparkle"/></svg>
   <svg class="sp" viewBox="0 0 24 24" aria-hidden="true" style="left:72%;top:3%;--s:20;--c:#4d7bff;--dl:0.5s;--dur:3.5s"><use href="#sparkle"/></svg>
-  <i class="sd hero-mid" aria-hidden="true" style="left:50%;top:32%;--s:8;--c:#9d47ea;--dl:0.4s;--dur:2.6s"></i>
-  <i class="sd hero-mid" aria-hidden="true" style="left:96%;top:40%;--s:9;--c:#ec3a97;--dl:1.2s;--dur:3.0s"></i>
+  <i class="sd" aria-hidden="true" style="left:50%;top:32%;--s:8;--c:#9d47ea;--dl:0.4s;--dur:2.6s"></i>
+  <i class="sd" aria-hidden="true" style="left:96%;top:40%;--s:9;--c:#ec3a97;--dl:1.2s;--dur:3.0s"></i>
   <i class="sd xm" aria-hidden="true" style="left:38%;top:88%;--s:7;--c:#ffb020;--dl:0.8s;--dur:2.4s"></i>
-  <i class="sd hero-mid" aria-hidden="true" style="left:8%;top:50%;--s:7;--c:#ff8fc9;--dl:1.6s;--dur:2.9s"></i>
+  <i class="sd" aria-hidden="true" style="left:8%;top:50%;--s:7;--c:#ff8fc9;--dl:1.6s;--dur:2.9s"></i>
   <i class="sd" aria-hidden="true" style="left:80%;top:12%;--s:8;--c:#ffb020;--dl:0.1s;--dur:2.7s"></i>
   <div class="wrap hero-grid">
     <div class="hero-copy">
       <span class="eyebrow reveal">Modern Websites. Built Better.</span>
-      <h1 class="reveal" style="--d:.06s"><span class="line">We Build</span><span class="line grad-text">Modern Websites</span><span class="line tag">With main character energy</span></h1>
-      <p class="sub reveal" style="--d:.12s">Custom websites, design, and creative digital solutions for your business glow-up.</p>
+      <h1 class="reveal" style="--d:.06s"><span class="line">We Build</span><span class="line grad-text">Modern Websites</span><span class="line tag">With Main Character Energy. ✨</span></h1>
+      <p class="sub reveal" style="--d:.12s">Custom websites, design, and creative digital solutions for your business glow-up goals.</p>
       <div class="cta-row reveal" style="--d:.18s">
-        <span class="bwrap"><span class="burst" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:-115px;--dy:-13px;--z:24;--c:var(--w);--dl:0.0s;--td:1.3s;--tl:0.9s"><use href="#sparkle"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:-65px;--dy:-65px;--z:17;--c:#ffd54a;--dl:0.03s;--td:2.1s;--tl:1.6s"><use href="#sparkle"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:-17px;--dy:-84px;--z:31;--c:#ff8fc9;--dl:0.06s;--td:1.7s;--tl:0.7s"><use href="#sparkle"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:82px;--dy:-45px;--z:19;--c:var(--w);--dl:0.09s;--td:2.6s;--tl:2.1s"><use href="#sparkle"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:127px;--dy:-30px;--z:26;--c:#ffd54a;--dl:0.12s;--td:1.5s;--tl:1.2s"><use href="#sparkle"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:144px;--dy:37px;--z:14;--c:#c08bff;--dl:0.15s;--td:2.3s;--tl:0.8s"><use href="#sparkle"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:79px;--dy:46px;--z:29;--c:var(--w);--dl:0.18s;--td:1.9s;--tl:2.4s"><use href="#sparkle"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:-19px;--dy:72px;--z:18;--c:#ff8fc9;--dl:0.21s;--td:1.2s;--tl:1.4s"><use href="#sparkle"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:-80px;--dy:73px;--z:22;--c:#ffd54a;--dl:0.24s;--td:2.8s;--tl:1.0s"><use href="#sparkle"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:-116px;--dy:11px;--z:16;--c:var(--w);--dl:0.27s;--td:1.6s;--tl:1.9s"><use href="#sparkle"/></svg></span><a href="#contact" class="btn btn-primary">Get a Free Quote <svg class="ic"><use href="#i-arrow"/></svg></a></span>
+        <a href="#contact" class="btn btn-primary">Get a Free Quote <svg class="ic"><use href="#i-arrow"/></svg></a>
         <a href="#process" class="btn btn-outline">How It Works</a>
       </div>
       <div class="feat-row reveal" style="--d:.24s">
@@ -840,14 +727,14 @@ footer{ position:relative; overflow-x:clip; }
   <svg class="sp" viewBox="0 0 24 24" aria-hidden="true" style="left:96%;top:55%;--s:24;--c:#9d47ea;--dl:1.0s;--dur:3.0s"><use href="#sparkle"/></svg>
   <div class="wrap">
     <div class="callout reveal">
-  <svg class="sp" viewBox="0 0 24 24" aria-hidden="true" style="left:49%;top:10%;--s:26;--c:var(--w);--dl:0s;--dur:3.0s"><use href="#sparkle"/></svg>
+  <svg class="sp" viewBox="0 0 24 24" aria-hidden="true" style="left:49%;top:10%;--s:26;--c:#ffffff;--dl:0s;--dur:3.0s"><use href="#sparkle"/></svg>
   <svg class="sp" viewBox="0 0 24 24" aria-hidden="true" style="left:96%;top:16%;--s:18;--c:#ffb020;--dl:0.7s;--dur:2.7s"><use href="#sparkle"/></svg>
-  <svg class="sp" viewBox="0 0 24 24" aria-hidden="true" style="left:48%;top:80%;--s:20;--c:var(--w);--dl:1.4s;--dur:3.3s"><use href="#sparkle"/></svg>
+  <svg class="sp" viewBox="0 0 24 24" aria-hidden="true" style="left:48%;top:80%;--s:20;--c:#ffffff;--dl:1.4s;--dur:3.3s"><use href="#sparkle"/></svg>
   <svg class="sp" viewBox="0 0 24 24" aria-hidden="true" style="left:2.4%;top:91%;--s:16;--c:#ffb020;--dl:0.3s;--dur:2.9s"><use href="#sparkle"/></svg>
-  <svg class="sp xm" viewBox="0 0 24 24" aria-hidden="true" style="left:30%;top:94%;--s:14;--c:var(--w);--dl:2.0s;--dur:2.6s"><use href="#sparkle"/></svg>
-  <svg class="sp" viewBox="0 0 24 24" aria-hidden="true" style="left:92%;top:84%;--s:26;--c:var(--w);--dl:0.9s;--dur:3.5s"><use href="#sparkle"/></svg>
-  <i class="sd" aria-hidden="true" style="left:52%;top:50%;--s:8;--c:var(--w);--dl:0.5s;--dur:2.5s"></i>
-  <i class="sd xm" aria-hidden="true" style="left:1.8%;top:50%;--s:7;--c:var(--w);--dl:1.5s;--dur:3.0s"></i>
+  <svg class="sp xm" viewBox="0 0 24 24" aria-hidden="true" style="left:30%;top:94%;--s:14;--c:#ffffff;--dl:2.0s;--dur:2.6s"><use href="#sparkle"/></svg>
+  <svg class="sp" viewBox="0 0 24 24" aria-hidden="true" style="left:92%;top:84%;--s:26;--c:#ffffff;--dl:0.9s;--dur:3.5s"><use href="#sparkle"/></svg>
+  <i class="sd" aria-hidden="true" style="left:52%;top:50%;--s:8;--c:#ffffff;--dl:0.5s;--dur:2.5s"></i>
+  <i class="sd xm" aria-hidden="true" style="left:1.8%;top:50%;--s:7;--c:#ffffff;--dl:1.5s;--dur:3.0s"></i>
   <i class="sd" aria-hidden="true" style="left:70%;top:8%;--s:8;--c:#ffb020;--dl:1.1s;--dur:2.8s"></i>
       <div class="co-deco" aria-hidden="true"><span class="co-orb o1"></span><span class="co-orb o2"></span><span class="co-orb o3"></span><span class="co-grid"></span></div>
       <div class="callout-grid">
@@ -943,23 +830,23 @@ footer{ position:relative; overflow-x:clip; }
       <p>A simple and transparent process from start to finish.</p>
     </div>
     <div class="path">
-      <svg class="curve" viewBox="0 0 1000 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0 62 C 45.0 62 45.0 28 90 28 C 135.0 28 135.0 88 180 88 C 225.0 88 225.0 30 270 30 C 315.0 30 315.0 92 360 92 C 405.0 92 405.0 34 450 34 C 495.0 34 495.0 84 540 84 C 585.0 84 585.0 26 630 26 C 675.0 26 675.0 80 720 80 C 765.0 80 765.0 40 810 40 C 855.0 40 855.0 74 900 74 C 950.0 74 950.0 50 1000 50"/></svg>
+      <svg class="curve" viewBox="0 0 1000 140" preserveAspectRatio="none" aria-hidden="true"><path d="M0 44 C 90 44 150 88 262 88 S 420 88 512 88 S 660 44 764 44 S 930 36 1000 12"/></svg>
       <div class="steps">
-        <div class="p-step n1 reveal" style="--d:.04s">
-          <span class="burst" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:-150px;--dy:-29px;--z:29;--c:var(--w);--dl:0.0s"><use href="#sparkle"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:-83px;--dy:-134px;--z:20;--c:#ffd54a;--dl:0.03s"><use href="#sparkle"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:-16px;--dy:-178px;--z:38;--c:#ff8fc9;--dl:0.06s"><use href="#sparkle"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:110px;--dy:-85px;--z:23;--c:var(--w);--dl:0.09s"><use href="#sparkle"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:177px;--dy:-56px;--z:32;--c:#ffd54a;--dl:0.12s"><use href="#sparkle"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:199px;--dy:83px;--z:17;--c:#c08bff;--dl:0.15s"><use href="#sparkle"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:99px;--dy:93px;--z:35;--c:var(--w);--dl:0.18s"><use href="#sparkle"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:-32px;--dy:147px;--z:22;--c:#ff8fc9;--dl:0.21s"><use href="#sparkle"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:-120px;--dy:150px;--z:26;--c:#ffd54a;--dl:0.24s"><use href="#sparkle"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:-153px;--dy:18px;--z:19;--c:var(--w);--dl:0.27s"><use href="#sparkle"/></svg></span><img class="p-char" src="assets/uxxie-discover-2.png" alt="Uxxie as a detective with a magnifying glass" width="560" height="495" loading="lazy">
-          <div class="p-card"><span class="num">01</span><div class="txt"><h3>Discover</h3><p>We learn about your goals and needs.</p></div></div>
+        <div class="p-step reveal" style="--d:.04s">
+          <div class="node n1"><svg class="ic"><use href="#i-message"/></svg><span class="num">01</span></div>
+          <div class="txt"><h3>Discover</h3><p>We learn about your goals and needs.</p></div>
         </div>
-        <div class="p-step n2 reveal" style="--d:.1s">
-          <span class="burst" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:-150px;--dy:-29px;--z:29;--c:var(--w);--dl:0.0s"><use href="#sparkle"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:-83px;--dy:-134px;--z:20;--c:#ffd54a;--dl:0.03s"><use href="#sparkle"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:-16px;--dy:-178px;--z:38;--c:#ff8fc9;--dl:0.06s"><use href="#sparkle"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:110px;--dy:-85px;--z:23;--c:var(--w);--dl:0.09s"><use href="#sparkle"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:177px;--dy:-56px;--z:32;--c:#ffd54a;--dl:0.12s"><use href="#sparkle"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:199px;--dy:83px;--z:17;--c:#c08bff;--dl:0.15s"><use href="#sparkle"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:99px;--dy:93px;--z:35;--c:var(--w);--dl:0.18s"><use href="#sparkle"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:-32px;--dy:147px;--z:22;--c:#ff8fc9;--dl:0.21s"><use href="#sparkle"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:-120px;--dy:150px;--z:26;--c:#ffd54a;--dl:0.24s"><use href="#sparkle"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:-153px;--dy:18px;--z:19;--c:var(--w);--dl:0.27s"><use href="#sparkle"/></svg></span><img class="p-char" src="assets/uxxie-plan.png" alt="Uxxie planning a design with a lightbulb idea" width="560" height="460" loading="lazy">
-          <div class="p-card"><span class="num">02</span><div class="txt"><h3>Plan &amp; Design</h3><p>We create a strategy and bring your vision to life.</p></div></div>
+        <div class="p-step reveal" style="--d:.1s">
+          <div class="node n2"><svg class="ic"><use href="#i-edit"/></svg><span class="num">02</span></div>
+          <div class="txt"><h3>Plan &amp; Design</h3><p>We create a strategy and bring your vision to life.</p></div>
         </div>
-        <div class="p-step n3 reveal" style="--d:.16s">
-          <span class="burst" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:-150px;--dy:-29px;--z:29;--c:var(--w);--dl:0.0s"><use href="#sparkle"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:-83px;--dy:-134px;--z:20;--c:#ffd54a;--dl:0.03s"><use href="#sparkle"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:-16px;--dy:-178px;--z:38;--c:#ff8fc9;--dl:0.06s"><use href="#sparkle"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:110px;--dy:-85px;--z:23;--c:var(--w);--dl:0.09s"><use href="#sparkle"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:177px;--dy:-56px;--z:32;--c:#ffd54a;--dl:0.12s"><use href="#sparkle"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:199px;--dy:83px;--z:17;--c:#c08bff;--dl:0.15s"><use href="#sparkle"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:99px;--dy:93px;--z:35;--c:var(--w);--dl:0.18s"><use href="#sparkle"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:-32px;--dy:147px;--z:22;--c:#ff8fc9;--dl:0.21s"><use href="#sparkle"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:-120px;--dy:150px;--z:26;--c:#ffd54a;--dl:0.24s"><use href="#sparkle"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:-153px;--dy:18px;--z:19;--c:var(--w);--dl:0.27s"><use href="#sparkle"/></svg></span><img class="p-char" src="assets/uxxie-develop-6.png" alt="Uxxie with glasses coding on a laptop" width="560" height="470" loading="lazy">
-          <div class="p-card"><span class="num">03</span><div class="txt"><h3>Develop</h3><p>We build, test, and optimize your website.</p></div></div>
+        <div class="p-step reveal" style="--d:.16s">
+          <div class="node n3"><svg class="ic"><use href="#i-code"/></svg><span class="num">03</span></div>
+          <div class="txt"><h3>Develop</h3><p>We build, test, and optimize your website.</p></div>
         </div>
-        <div class="p-step n4 reveal" style="--d:.22s">
-          <span class="burst" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:-150px;--dy:-29px;--z:29;--c:var(--w);--dl:0.0s"><use href="#sparkle"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:-83px;--dy:-134px;--z:20;--c:#ffd54a;--dl:0.03s"><use href="#sparkle"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:-16px;--dy:-178px;--z:38;--c:#ff8fc9;--dl:0.06s"><use href="#sparkle"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:110px;--dy:-85px;--z:23;--c:var(--w);--dl:0.09s"><use href="#sparkle"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:177px;--dy:-56px;--z:32;--c:#ffd54a;--dl:0.12s"><use href="#sparkle"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:199px;--dy:83px;--z:17;--c:#c08bff;--dl:0.15s"><use href="#sparkle"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:99px;--dy:93px;--z:35;--c:var(--w);--dl:0.18s"><use href="#sparkle"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:-32px;--dy:147px;--z:22;--c:#ff8fc9;--dl:0.21s"><use href="#sparkle"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:-120px;--dy:150px;--z:26;--c:#ffd54a;--dl:0.24s"><use href="#sparkle"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" style="--dx:-153px;--dy:18px;--z:19;--c:var(--w);--dl:0.27s"><use href="#sparkle"/></svg></span><img class="p-char" src="assets/uxxie-launch-2.png" alt="Uxxie in a space suit celebrating a launched website" width="560" height="484" loading="lazy">
-          <div class="p-card"><span class="num">04</span><div class="txt"><h3>Launch</h3><p>Your new website goes live and you&rsquo;re ready for business.</p></div></div>
+        <div class="p-step reveal" style="--d:.22s">
+          <div class="node n4"><svg class="ic"><use href="#i-rocket"/></svg><span class="num">04</span></div>
+          <div class="txt"><h3>Launch</h3><p>Your new website goes live and you&rsquo;re ready for business.</p></div>
         </div>
       </div>
     </div>
@@ -989,7 +876,7 @@ footer{ position:relative; overflow-x:clip; }
       <article class="t-card reveal" style="--d:.04s">
         <span class="qm" aria-hidden="true">&rdquo;</span>
         <div class="stars" aria-label="5 out of 5 stars"><svg class="ic ic-fill"><use href="#i-star"/></svg><svg class="ic ic-fill"><use href="#i-star"/></svg><svg class="ic ic-fill"><use href="#i-star"/></svg><svg class="ic ic-fill"><use href="#i-star"/></svg><svg class="ic ic-fill"><use href="#i-star"/></svg></div>
-        <blockquote>&ldquo;The entire process was so easy. They took my ideas and turned them into a website that looks modern, professional, with a very quick turnaround.&rdquo;</blockquote>
+        <blockquote>&ldquo;The entire process so easy. They took my ideas and turned them into a website that looks modern, professional, with a very quick turnaround.&rdquo;</blockquote>
         <div class="t-person"><div class="t-avatar n1">JO</div><div><div class="name">John Opal</div><div class="role">Founder, Business Owner</div></div></div>
       </article>
       <article class="t-card reveal" style="--d:.1s">
@@ -1010,17 +897,17 @@ footer{ position:relative; overflow-x:clip; }
 
 <!-- ===== CTA banner ===== -->
 <section class="cta" id="contact">
-  <svg class="sp" viewBox="0 0 24 24" aria-hidden="true" style="left:6%;top:14%;--s:22;--c:var(--w);--dl:0.2s;--dur:3.1s"><use href="#sparkle"/></svg>
-  <svg class="sp" viewBox="0 0 24 24" aria-hidden="true" style="left:42%;top:10%;--s:32;--c:var(--w);--dl:0.9s;--dur:3.5s"><use href="#sparkle"/></svg>
+  <svg class="sp" viewBox="0 0 24 24" aria-hidden="true" style="left:6%;top:14%;--s:22;--c:#ffffff;--dl:0.2s;--dur:3.1s"><use href="#sparkle"/></svg>
+  <svg class="sp" viewBox="0 0 24 24" aria-hidden="true" style="left:42%;top:10%;--s:32;--c:#ffffff;--dl:0.9s;--dur:3.5s"><use href="#sparkle"/></svg>
   <svg class="sp" viewBox="0 0 24 24" aria-hidden="true" style="left:94%;top:14%;--s:18;--c:#ffb020;--dl:0.1s;--dur:2.8s"><use href="#sparkle"/></svg>
-  <svg class="sp" viewBox="0 0 24 24" aria-hidden="true" style="left:55%;top:84%;--s:20;--c:var(--w);--dl:1.5s;--dur:3.2s"><use href="#sparkle"/></svg>
-  <svg class="sp" viewBox="0 0 24 24" aria-hidden="true" style="left:90%;top:68%;--s:28;--c:var(--w);--dl:0.6s;--dur:3.6s"><use href="#sparkle"/></svg>
+  <svg class="sp" viewBox="0 0 24 24" aria-hidden="true" style="left:55%;top:84%;--s:20;--c:#ffffff;--dl:1.5s;--dur:3.2s"><use href="#sparkle"/></svg>
+  <svg class="sp" viewBox="0 0 24 24" aria-hidden="true" style="left:90%;top:68%;--s:28;--c:#ffffff;--dl:0.6s;--dur:3.6s"><use href="#sparkle"/></svg>
   <svg class="sp" viewBox="0 0 24 24" aria-hidden="true" style="left:3%;top:74%;--s:16;--c:#ffb020;--dl:1.1s;--dur:2.9s"><use href="#sparkle"/></svg>
-  <svg class="sp xm" viewBox="0 0 24 24" aria-hidden="true" style="left:70%;top:22%;--s:12;--c:var(--w);--dl:1.9s;--dur:2.6s"><use href="#sparkle"/></svg>
-  <svg class="sp xm" viewBox="0 0 24 24" aria-hidden="true" style="left:25%;top:88%;--s:14;--c:var(--w);--dl:0.4s;--dur:2.8s"><use href="#sparkle"/></svg>
-  <i class="sd" aria-hidden="true" style="left:18%;top:40%;--s:8;--c:var(--w);--dl:0.7s;--dur:2.6s"></i>
+  <svg class="sp xm" viewBox="0 0 24 24" aria-hidden="true" style="left:70%;top:22%;--s:12;--c:#ffffff;--dl:1.9s;--dur:2.6s"><use href="#sparkle"/></svg>
+  <svg class="sp xm" viewBox="0 0 24 24" aria-hidden="true" style="left:25%;top:88%;--s:14;--c:#ffffff;--dl:0.4s;--dur:2.8s"><use href="#sparkle"/></svg>
+  <i class="sd" aria-hidden="true" style="left:18%;top:40%;--s:8;--c:#ffffff;--dl:0.7s;--dur:2.6s"></i>
   <i class="sd" aria-hidden="true" style="left:80%;top:50%;--s:8;--c:#ffb020;--dl:1.3s;--dur:3.0s"></i>
-  <i class="sd xm" aria-hidden="true" style="left:48%;top:92%;--s:7;--c:var(--w);--dl:0.3s;--dur:2.5s"></i>
+  <i class="sd xm" aria-hidden="true" style="left:48%;top:92%;--s:7;--c:#ffffff;--dl:0.3s;--dur:2.5s"></i>
   <svg class="cta-bg" viewBox="0 0 1440 460" preserveAspectRatio="none" aria-hidden="true">
     <defs><linearGradient id="ctag" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ee3d9a"/><stop offset=".55" stop-color="#a349ea"/><stop offset="1" stop-color="#7f63f4"/></linearGradient></defs>
     <path fill="url(#ctag)" d="M0 78 C 150 22 300 34 470 56 S 820 96 1010 46 S 1300 4 1440 56 V 392 C 1300 448 1120 420 920 440 S 520 462 320 432 S 70 444 0 408 Z"/>
@@ -1055,7 +942,8 @@ footer{ position:relative; overflow-x:clip; }
   <div class="wrap">
     <div class="footer-inner">
       <a href="#top" class="footer-brand" aria-label="UX Labs Pro home">
-        <img src="assets/logo-v8.png" alt="UX Labs Pro" width="1200" height="392">
+        <img src="assets/logo-dark.png" alt="UX Labs Pro" class="logo-dark">
+        <img src="assets/logo-light.png" alt="UX Labs Pro" class="logo-light">
       </a>
       <nav class="footer-links" aria-label="Footer">
         <a href="#top">Home</a>
@@ -1076,9 +964,9 @@ footer{ position:relative; overflow-x:clip; }
   <div class="modal" id="quoteModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="modal-head">
       <div class="co-deco" aria-hidden="true"><span class="co-orb o1"></span><span class="co-orb o2"></span><span class="co-grid"></span></div>
-      <svg class="sp" viewBox="0 0 24 24" aria-hidden="true" style="right:16%;top:22%;--s:16;--c:var(--w);--dl:.2s;--dur:3s"><use href="#sparkle"/></svg>
+      <svg class="sp" viewBox="0 0 24 24" aria-hidden="true" style="right:16%;top:22%;--s:16;--c:#ffffff;--dl:.2s;--dur:3s"><use href="#sparkle"/></svg>
       <svg class="sp" viewBox="0 0 24 24" aria-hidden="true" style="right:6%;top:58%;--s:12;--c:#ffd166;--dl:1s;--dur:2.7s"><use href="#sparkle"/></svg>
-      <svg class="sp" viewBox="0 0 24 24" aria-hidden="true" style="left:58%;top:74%;--s:11;--c:var(--w);--dl:1.6s;--dur:3.2s"><use href="#sparkle"/></svg>
+      <svg class="sp" viewBox="0 0 24 24" aria-hidden="true" style="left:58%;top:74%;--s:11;--c:#ffffff;--dl:1.6s;--dur:3.2s"><use href="#sparkle"/></svg>
       <button class="modal-close" id="modalClose" type="button" aria-label="Close"><svg class="ic"><use href="#i-close"/></svg></button>
       <span class="co-tag">Free quote</span>
       <h2 id="modalTitle">Tell us about your project</h2>
@@ -1161,8 +1049,7 @@ footer{ position:relative; overflow-x:clip; }
   window.addEventListener('keydown', function(e){ if(e.key === 'Escape'){ setMenu(false); } });
 
   /* Scroll reveal */
-  var calloutEl = document.querySelector('.callout.reveal');
-  var revealEls = Array.prototype.slice.call(document.querySelectorAll('.reveal')).filter(function(el){ return el !== calloutEl; });
+  var revealEls = document.querySelectorAll('.reveal');
   if('IntersectionObserver' in window && !reduceMotion){
     var io = new IntersectionObserver(function(entries){
       entries.forEach(function(entry){
@@ -1172,11 +1059,6 @@ footer{ position:relative; overflow-x:clip; }
     revealEls.forEach(function(el){ io.observe(el); });
   } else {
     revealEls.forEach(function(el){ el.classList.add('in'); });
-  }
-  /* Callout loads in immediately on page load instead of waiting for scroll */
-  if(calloutEl){
-    if(reduceMotion){ calloutEl.classList.add('in'); }
-    else{ requestAnimationFrame(function(){ requestAnimationFrame(function(){ calloutEl.classList.add('in'); }); }); }
   }
 
   /* Active nav link */
