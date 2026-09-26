@@ -269,7 +269,7 @@ h1,h2,h3,h4,h5,p{ margin:0; }
   .hero-copy{ align-items:center; text-align:center; }
   .cta-row{ justify-content:center; }
   .feat-row{ margin-inline:auto; }
-  .dev-wrap{ width:100%; height:var(--dev-h, calc(clamp(360px,72vw,520px) * .8)); margin:26px auto 0; order:-1; } /* full width on mobile; --dev-h is set by script so the CTA buttons stay on screen (fallback height used until it runs) */
+  .dev-wrap{ width:100%; height:clamp(360px,72vw,520px); margin:26px auto 0; order:-1; } /* full width on mobile at its natural proportions; the script below scales the whole block down (zoom) when needed so the CTA row fits on the first screen */
 }
 @media (max-width:520px){
   .feat{ padding:0 7px; font-size:11.5px; }
@@ -1201,22 +1201,24 @@ footer{ position:relative; overflow-x:clip; }
 
 
 
-  /* Mobile hero: size the monitor block so the "Get a Free Quote" row ends up visible at the bottom of the first screen */
+  /* Mobile hero: scale the whole monitor block down (contents and all, so nothing overlaps) just enough for the "Get a Free Quote" row to sit on the first screen. Uses the standalone `scale` property (the .reveal rules only touch `transform`) and pulls the text up by exactly the space the shrink frees. */
   (function(){
     var dev = document.querySelector('.dev-wrap'), cta = document.querySelector('.hero .cta-row');
     if(!dev || !cta) return;
     var mq = window.matchMedia('(max-width:960px)'), lastW = -1;
+    function reset(){ dev.style.scale = ''; dev.style.marginBottom = ''; dev.style.transformOrigin = ''; }
     function fit(force){
       var w = window.innerWidth;
       if(!force && w === lastW) return;            /* ignore height-only resizes (mobile URL bar showing/hiding) so it never jumps */
       lastW = w;
-      if(!mq.matches){ dev.style.removeProperty('--dev-h'); return; }
-      dev.style.removeProperty('--dev-h');         /* measure from a known state */
-      var top = dev.getBoundingClientRect().top + window.pageYOffset;
-      var below = cta.getBoundingClientRect().bottom - dev.getBoundingClientRect().bottom;   /* text + gaps under the monitors, up to the buttons */
-      var h = window.innerHeight - top - below - 20;
-      h = Math.max(190, Math.min(520, h));
-      dev.style.setProperty('--dev-h', Math.round(h) + 'px');
+      reset();
+      if(!mq.matches) return;
+      var over = cta.getBoundingClientRect().bottom - (window.innerHeight - 20);   /* how far the buttons sit below the fold */
+      if(over <= 0) return;                        /* already fits at full size */
+      var H = dev.offsetHeight, k = Math.max(0.5, (H - over) / H);
+      dev.style.transformOrigin = '50% 0';
+      dev.style.scale = k;
+      dev.style.marginBottom = (-(1 - k) * H) + 'px';
     }
     fit(true);
     window.addEventListener('resize', function(){ fit(false); });
