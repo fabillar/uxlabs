@@ -413,6 +413,18 @@ h1,h2,h3,h4,h5,p{ margin:0; }
   60%{ opacity:1; transform:translate(var(--dx),var(--dy)) scale(1.15) rotate(150deg); }
   100%{ opacity:0; transform:translate(calc(var(--dx) * 1.18),calc(var(--dy) * 1.18 + 14px)) scale(.2) rotate(260deg); }
 }
+/* Mobile hero fitting stages (toggled by the script): stand tucked up behind the monitor, then tighter spacing and slightly smaller buttons */
+/* Monitor stand: sits behind the screen (z-index) and slides up under it by --tuck px, set by the script when the block needs to be shorter */
+.monitor .screen{ position:relative; z-index:2; }
+.monitor .neck, .monitor .foot{ position:relative; z-index:1; }
+.monitor .neck{ margin-top:calc(var(--tuck, 0px) * -1); }
+.dev-wrap.tucked .monitor .foot{ box-shadow:none; }
+.hero.tight .dev-wrap{ margin-top:8px; }
+.hero.tight .hero-copy{ gap:12px; }
+.hero.tight .cta-row{ gap:10px; margin-top:0; }
+.hero.tight .cta-row .btn{ padding:12px 18px; font-size:13.5px; }
+.hero.tight .cta-row .btn-outline{ padding:10.5px 16px; }
+@media (max-width:340px){ .hero.tight .cta-row .btn{ padding:11px 14px; font-size:13px; } .hero.tight .cta-row .btn-outline{ padding:9.5px 13px; } .hero.tight .sub{ font-size:14px; line-height:1.5; } .hero.tight h1{ font-size:32px; } }
 @media (prefers-reduced-motion: reduce){ .burst{ display:none; } }
 @media (prefers-reduced-motion: reduce){ .p-char{ animation:none !important; } }
 .p-card{ position:relative; z-index:2; width:100%; max-width:calc(258px * var(--s)); min-height:calc(150px * var(--s)); padding:calc(26px * var(--s)) calc(30px * var(--s)) calc(22px * var(--s)); display:flex; align-items:center; justify-content:center; }
@@ -1201,29 +1213,36 @@ footer{ position:relative; overflow-x:clip; }
 
 
 
-  /* Mobile hero: the monitor always keeps its full width. If the "Get a Free Quote" row would sit below the first screen, the monitor block gets shorter instead: the tablet and phone (anchored to its bottom) slide up and overlap the monitor. It never gets shorter than the monitor itself. */
+  /* Mobile hero: make sure the "Get a Free Quote" row is on the first screen. The monitor always keeps its full width. Steps, only as far as needed:
+     1) shorten the monitor block so the tablet and phone slide up over the monitor,  2) slide the monitor stand up behind the screen (never in front, so it can't poke out),  3) tighten spacing and slightly shrink the buttons. */
   (function(){
-    var dev = document.querySelector('.dev-wrap'), mon = dev && dev.querySelector('.monitor'), cta = document.querySelector('.hero .cta-row');
-    if(!dev || !mon || !cta) return;
+    var hero = document.querySelector('.hero'), dev = document.querySelector('.dev-wrap'), mon = dev && dev.querySelector('.monitor'), neck = mon && mon.querySelector('.neck'), foot = mon && mon.querySelector('.foot'), cta = document.querySelector('.hero .cta-row');
+    if(!hero || !dev || !mon || !neck || !foot || !cta) return;
     var mq = window.matchMedia('(max-width:960px)'), lastW = -1;
+    function target(){ return window.innerHeight - 16; }
+    function over(){ return cta.getBoundingClientRect().bottom - target(); }
+    function monBottom(){ return mon.offsetTop + mon.offsetHeight + 4; }
+    function shorten(){                              /* shrink the block; below the monitor's own bottom, tuck the stand up behind the screen */
+      var o = over(); if(o <= 0) return;
+      var h = dev.offsetHeight - o, maxTuck = neck.offsetHeight + foot.offsetHeight;
+      for(var n = 0; n < 6; n++){
+        dev.style.height = h + 'px';
+        var mb = monBottom();
+        if(h >= mb - 0.5) break;
+        var tuck = Math.min(maxTuck, (parseFloat(dev.style.getPropertyValue('--tuck')) || 0) + (mb - h));
+        dev.style.setProperty('--tuck', tuck + 'px'); dev.classList.add('tucked');
+        if(tuck >= maxTuck){ dev.style.height = Math.max(h, monBottom()) + 'px'; break; }
+      }
+    }
     function fit(force){
       var w = window.innerWidth;
-      if(!force && w === lastW) return;            /* ignore height-only resizes (mobile URL bar showing/hiding) so it never jumps */
+      if(!force && w === lastW) return;              /* ignore height-only resizes (mobile URL bar showing/hiding) so it never jumps */
       lastW = w;
-      dev.style.height = '';
-      if(!mq.matches) return;
-      var target = window.innerHeight - 20;
-      var over = cta.getBoundingClientRect().bottom - target;
-      if(over <= 0) return;                        /* already fits at full height */
-      var h = dev.offsetHeight - over;
-      for(var n = 0; n < 3; n++){                  /* the monitor's top offset is a % of the height, so settle it in a few passes */
-        dev.style.height = h + 'px';
-        var minH = mon.offsetTop + mon.offsetHeight + 4;   /* monitor bottom edge: don't go shorter than the monitor itself */
-        var want = Math.max(minH, h);
-        if(Math.abs(want - h) < 0.5) break;
-        h = want;
-      }
-      dev.style.height = Math.round(h) + 'px';
+      dev.style.height = ''; dev.style.removeProperty('--tuck'); dev.classList.remove('tucked'); hero.classList.remove('tight');
+      if(!mq.matches || over() <= 0) return;
+      shorten();                                     /* 1 + 2 */
+      if(over() <= 0) return;
+      hero.classList.add('tight'); dev.style.height = ''; dev.style.removeProperty('--tuck'); dev.classList.remove('tucked'); shorten();   /* 3 */
     }
     fit(true);
     window.addEventListener('resize', function(){ fit(false); });
