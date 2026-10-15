@@ -801,6 +801,11 @@ footer{ position:relative; overflow-x:clip; }
 .m-field textarea{ resize:vertical; min-height:96px; }
 .m-field input:focus, .m-field select:focus, .m-field textarea:focus{ border-color:var(--magenta); box-shadow:0 0 0 4px color-mix(in srgb, var(--magenta) 16%, transparent); }
 .m-form .btn-primary{ width:100%; margin-top:2px; }
+.m-form .btn-primary:disabled{ opacity:.75; cursor:progress; transform:none; }
+.m-form .btn-primary.sending .ic{ animation:pfv-spin 1s linear infinite; }
+.m-trap{ position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
+.m-error{ margin:0; padding:10px 14px; border-radius:12px; font-size:13.5px; line-height:1.5; color:#b4235f; background:color-mix(in srgb, var(--magenta) 10%, var(--card)); border:1px solid color-mix(in srgb, var(--magenta) 30%, transparent); }
+.m-error a{ color:inherit; font-weight:600; text-decoration:underline; }
 .m-note{ font-size:12.5px; color:var(--text-dim); text-align:center; line-height:1.6; margin:0; }
 .m-note a{ color:var(--magenta); font-weight:600; }
 .m-done{ display:none; flex-direction:column; align-items:center; text-align:center; gap:12px; padding:clamp(30px,5vw,44px) clamp(22px,4vw,34px); position:relative; }
@@ -886,7 +891,7 @@ footer{ position:relative; overflow-x:clip; }
       <a href="#top" class="active">Home</a>
       <a href="#services">Services</a>
       <a href="#process">Process</a>
-      <a href="#portfolio">Portfolio</a>
+      <a href="#portfolio" hidden>Portfolio</a>
       <a href="#contact">Contact</a>
     </nav>
     <div class="nav-actions">
@@ -904,7 +909,7 @@ footer{ position:relative; overflow-x:clip; }
   <a href="#top">Home</a>
   <a href="#services">Services</a>
   <a href="#process">Process</a>
-  <a href="#portfolio">Portfolio</a>
+  <a href="#portfolio" hidden>Portfolio</a>
   <a href="#contact">Contact</a>
   <a href="#contact" class="btn btn-primary">Get a Free Quote</a>
 </div>
@@ -1131,7 +1136,8 @@ footer{ position:relative; overflow-x:clip; }
 </section>
 
 <!-- ===== Portfolio ===== -->
-<section class="portfolio" id="portfolio">
+<!-- TEMPORARILY HIDDEN: remove the "hidden" attribute here (and on the 3 "Portfolio" nav links) to bring this section back -->
+<section class="portfolio" id="portfolio" hidden>
   <span class="pf-arc l" aria-hidden="true"></span><span class="pf-arc r" aria-hidden="true"></span>
   <span class="deco pf-blob a" aria-hidden="true"></span><span class="deco pf-blob b" aria-hidden="true"></span>
   <svg class="sp xm" viewBox="0 0 24 24" aria-hidden="true" style="left:9%;top:12%;--s:34;--c:#ec3a97;--dl:0.2s;--dur:3.4s"><use href="#sparkle"/></svg>
@@ -1317,7 +1323,7 @@ footer{ position:relative; overflow-x:clip; }
         <a href="#top">Home</a>
         <a href="#services">Services</a>
         <a href="#process">Process</a>
-        <a href="#portfolio">Portfolio</a>
+        <a href="#portfolio" hidden>Portfolio</a>
         <a href="#contact">Contact</a>
       </nav>
       <div class="footer-meta">
@@ -1359,7 +1365,9 @@ footer{ position:relative; overflow-x:clip; }
         </div>
       </div>
       <div class="m-field"><label for="q-message">Tell us about your project</label><textarea id="q-message" name="message" rows="4" placeholder="What are you looking to build?" required></textarea></div>
-      <button type="submit" class="btn btn-primary">Send message <svg class="ic"><use href="#i-arrow"/></svg></button>
+      <div class="m-trap" aria-hidden="true"><label for="q-company">Company</label><input id="q-company" name="company" type="text" tabindex="-1" autocomplete="off"></div>
+      <p class="m-error" id="quoteError" role="alert" hidden></p>
+      <button type="submit" class="btn btn-primary" id="quoteSend"><span class="lbl">Send message</span> <svg class="ic"><use href="#i-arrow"/></svg></button>
       <p class="m-note">Prefer email? <a href="mailto:hello@uxlabs.pro" data-direct>hello@uxlabs.pro</a> &middot; <a href="tel:+12175681917">(217) 568-1917</a></p>
     </form>
     <div class="m-done" id="quoteDone" role="status" aria-live="polite">
@@ -1367,7 +1375,7 @@ footer{ position:relative; overflow-x:clip; }
       <svg class="sp" viewBox="0 0 24 24" aria-hidden="true" style="right:16%;top:22%;--s:20;--c:#ffb020;--dl:.7s;--dur:3.2s"><use href="#sparkle"/></svg>
       <div class="badge"><svg class="ic"><use href="#i-check"/></svg></div>
       <h3>Thanks &mdash; you&rsquo;re all set!</h3>
-      <p>Your email app should be opening with your message ready to send. If nothing opens, just email us at <a href="mailto:hello@uxlabs.pro" data-direct>hello@uxlabs.pro</a> and we&rsquo;ll take it from there.</p>
+      <p>Your message is on its way. We&rsquo;ll get back to you within 1&ndash;2 business days. Need us sooner? Email <a href="mailto:hello@uxlabs.pro" data-direct>hello@uxlabs.pro</a>.</p>
       <button type="button" class="btn btn-outline" id="quoteAgain">Close</button>
     </div>
   </div>
@@ -1492,16 +1500,15 @@ footer{ position:relative; overflow-x:clip; }
         }
       });
     }, { rootMargin:'-45% 0px -50% 0px' });
-    [['.hero','#top'],['#services','#services'],['#process','#process'],['#portfolio','#portfolio'],['#feedback','#portfolio'],['#contact','#contact']].forEach(function(p){
+    [['.hero','#top'],['#services','#services'],['#process','#process'],['#portfolio','#portfolio'],['#feedback','#process'],['#contact','#contact']].forEach(function(p){
       var el = document.querySelector(p[0]);
       if(el){ el.setAttribute('data-nav', p[1]); spy.observe(el); }
     });
   }
 
   /* Quote / contact modal */
-  /* To receive submissions without an email app, paste a form-service URL here (e.g. Formspree or Web3Forms).
-     While empty, sending composes an email to hello@uxlabs.pro. */
-  var FORM_ENDPOINT = '';
+  /* Submissions go to the Vercel function in /api/contact.js, which emails them through Resend. */
+  var FORM_ENDPOINT = '/api/contact';
   var modalBack = document.getElementById('modalBack');
   var modalEl = document.getElementById('quoteModal');
   var qForm = document.getElementById('quoteForm');
@@ -1542,23 +1549,24 @@ footer{ position:relative; overflow-x:clip; }
       else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
     }
   });
+  var qErr = document.getElementById('quoteError'), qSend = document.getElementById('quoteSend');
+  function showErr(msg){ qErr.innerHTML = msg; qErr.hidden = false; }
   qForm.addEventListener('submit', function(e){
     e.preventDefault();
+    if(qSend.disabled) return;
     if(!qForm.checkValidity()){ qForm.reportValidity(); return; }
-    var d = { name:qForm.name.value.trim(), email:qForm.email.value.trim(), phone:qForm.phone.value.trim(), service:qForm.service.value, message:qForm.message.value.trim() };
-    function done(){ modalEl.classList.add('sent'); }
-    if(FORM_ENDPOINT){
-      fetch(FORM_ENDPOINT, { method:'POST', headers:{ 'Accept':'application/json', 'Content-Type':'application/json' }, body:JSON.stringify(d) })
-        .then(function(r){ if(!r.ok) throw new Error('bad'); done(); qForm.reset(); })
-        .catch(function(){ alert('Sorry, something went wrong. Please email hello@uxlabs.pro instead.'); });
-      return;
-    }
-    var subject = encodeURIComponent('New project inquiry from ' + d.name);
-    var lines = [d.message, '', '— ' + d.name, d.email];
-    if(d.phone){ lines.push(d.phone); }
-    if(d.service){ lines.push('Interested in: ' + d.service); }
-    window.location.href = 'mailto:hello@uxlabs.pro?subject=' + subject + '&body=' + encodeURIComponent(lines.join('\n'));
-    done();
+    qErr.hidden = true;
+    var d = { name:qForm.name.value.trim(), email:qForm.email.value.trim(), phone:qForm.phone.value.trim(), service:qForm.service.value, message:qForm.message.value.trim(), company:qForm.company.value };
+    var lbl = qSend.querySelector('.lbl'), was = lbl.textContent;
+    qSend.disabled = true; qSend.classList.add('sending'); lbl.textContent = 'Sending…';
+    fetch(FORM_ENDPOINT, { method:'POST', headers:{ 'Accept':'application/json', 'Content-Type':'application/json' }, body:JSON.stringify(d) })
+      .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(j){ if(!r.ok || !j.ok){ throw new Error(j.error || 'failed'); } }); })
+      .then(function(){ modalEl.classList.add('sent'); qForm.reset(); })
+      .catch(function(err){
+        var m = err && err.message && err.message !== 'failed' && err.message.indexOf('fetch') === -1 ? err.message + ' ' : 'Sorry, your message couldn&rsquo;t be sent. ';
+        showErr(m.replace(/</g,'&lt;').replace(/&lt;/g,'<').replace(/<(?!\/?(a|br)\b)/g,'&lt;') + 'You can also email us at <a href="mailto:hello@uxlabs.pro" data-direct>hello@uxlabs.pro</a>.');
+      })
+      .then(function(){ qSend.disabled = false; qSend.classList.remove('sending'); lbl.textContent = was; });
   });
 
   /* Floating scroll-to-top button */
